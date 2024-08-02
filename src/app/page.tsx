@@ -20,7 +20,7 @@ export default function Home() {
                 <p className="text-lg mb-8">
                   Unlock your potential with our learning platform.
                 </p>
-                <Link href="https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=406113766044-dld0rkmum5s7i217kkm9bvdgc472akvu.apps.googleusercontent.com&scope=openid%20email%20profile&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A3000%2Fapi%2Fauth%2Fcallback%2Fgoogle&state=zeDN8E8stU9ecEwkUeTR7I7WNWXrimTbNyg25m0tDNU&code_challenge=2z9ieJuf5_VvUqGKwXdPtn1RtgQRcH0-f16UrdKE1ow&code_challenge_method=S256&service=lso&o2v=2&ddm=0&flowName=GeneralOAuthFlow">
+                <Link href="https://accounts.google.com/o/oauth2/v2/auth/oauthchooseaccount?client_id=406113766044-dld0rkmum5s7i217kkm9bvdgc472akvu.apps.googleusercontent.com&scope=openid%20email%20profile&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A%2F3000%2Fapi%2Fauth%2Fcallback%2Fgoogle&state=zeDN8E8stU9ecEwkUeTR7I7WNWXrimTbNyg25m0tDNU&code_challenge=2z9ieJuf5_VvUqGKwXdPtn1RtgQRcH0-f16UrdKE1ow&code_challenge_method=S256&service=lso&o2v=2&ddm=0&flowName=GeneralOAuthFlow">
                   <Button size="lg" variant="secondary" className="flex items-center">
                     Get Started <ArrowRight className="ml-2" />
                   </Button>
@@ -101,7 +101,7 @@ export default function Home() {
                 { name: "Emily Johnson", testimonial: "I love the personalized learning paths." },
               ].map((review, index) => (
                 <div key={index} className="flex-1 bg-white p-6 rounded-lg shadow-sm">
-                  <p className="text-gray-700 mb-4">"{review.testimonial}"</p>
+                  <p className="text-gray-700 mb-4">&ldquo;{review.testimonial}&rdquo;</p>
                   <p className="font-semibold text-gray-800">— {review.name}</p>
                 </div>
               ))}
@@ -129,7 +129,7 @@ export default function Home() {
 
       <footer className="bg-gray-800 py-6">
         <div className="container mx-auto px-6 text-center text-gray-300">
-          © 2024 Your Learning Platform. All rights reserved.
+          © 2024 Smartify AI. All rights reserved.
         </div>
       </footer>
     </div>
