@@ -13,7 +13,7 @@ const Navbar = async () => {
   return (
     <nav className="fixed inset-x-0 top-0 z-[10] h-16 border-b border-zinc-300 bg-background/80 backdrop-blur-sm">
       <div className="container flex h-full items-center justify-between">
-        <Link href="http://localhost:3000/" className="flex items-center gap-2">
+        <Link href="https://smartify-project.vercel.app/" className="flex items-center gap-2">
           <Button variant="outline" className="text-xl font-bold">
             Smartify
           </Button>
