@@ -8,16 +8,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "./ui/input";
 import { Separator } from "./ui/separator";
 import { Button } from "./ui/button";
-import { Plus, Trash, Loader2 } from "lucide-react";
+import { Plus, Trash, Loader2, BookOpen } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useToast } from "./ui/use-toast";
 import { useRouter } from "next/navigation";
 import SubscriptionAction from "./SubscriptionAction";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 
 type Props = { isPro: boolean };
-
 type Input = z.infer<typeof createChaptersSchema>;
 
 const CreateCourseForm = ({ isPro }: Props) => {
@@ -71,52 +71,52 @@ const CreateCourseForm = ({ isPro }: Props) => {
   form.watch();
 
   return (
-    <div className="w-full">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full mt-4">
-          <FormField
-            control={form.control}
-            name="title"
-            render={({ field }) => {
-              return (
-                <FormItem className="flex flex-col items-start w-full sm:items-center sm:flex-row">
-                  <FormLabel className="flex-[1] text-xl">Title</FormLabel>
-                  <FormControl className="flex-[6]">
+    <Card className="w-full max-w-3xl mx-auto">
+      <CardHeader>
+        <CardTitle className="text-2xl font-bold text-center">
+          <BookOpen className="inline-block mr-2 mb-1" />
+          Create New Course
+        </CardTitle>
+      </CardHeader>
+      <CardContent>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+            <FormField
+              control={form.control}
+              name="title"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-lg font-semibold">Course Title</FormLabel>
+                  <FormControl>
                     <Input
                       placeholder="Enter the main topic of the course"
                       {...field}
                       disabled={isPending}
+                      className="text-lg"
                     />
                   </FormControl>
                 </FormItem>
-              );
-            }}
-          />
+              )}
+            />
 
-          <AnimatePresence>
-            {form.watch("units").map((_, index) => {
-              return (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{
-                    opacity: { duration: 0.2 },
-                    height: { duration: 0.2 },
-                  }}
-                >
-                  <FormField
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold">Course Units</h3>
+              <AnimatePresence>
+                {form.watch("units").map((_, index) => (
+                  <motion.div
                     key={index}
-                    control={form.control}
-                    name={`units.${index}`}
-                    render={({ field }) => {
-                      return (
-                        <FormItem className="flex flex-col items-start w-full sm:items-center sm:flex-row">
-                          <FormLabel className="flex-[1] text-xl">
-                            Unit {index + 1}
-                          </FormLabel>
-                          <FormControl className="flex-[6]">
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <FormField
+                      control={form.control}
+                      name={`units.${index}`}
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-md">Unit {index + 1}</FormLabel>
+                          <FormControl>
                             <Input
                               placeholder="Enter subtopic of the course"
                               {...field}
@@ -124,64 +124,60 @@ const CreateCourseForm = ({ isPro }: Props) => {
                             />
                           </FormControl>
                         </FormItem>
-                      );
-                    }}
-                  />
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+                      )}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
 
-          <div className="flex items-center justify-center mt-4">
-            <Separator className="flex-[1]" />
-            <div className="mx-4">
+            <div className="flex items-center justify-center space-x-4">
               <Button
                 type="button"
-                variant="secondary"
-                className="font-semibold"
-                onClick={() => {
-                  form.setValue("units", [...form.watch("units"), ""]);
-                }}
+                variant="outline"
+                onClick={() => form.setValue("units", [...form.watch("units"), ""])}
                 disabled={isPending}
               >
+                <Plus className="w-4 h-4 mr-2" />
                 Add Unit
-                <Plus className="w-4 h-4 ml-2 text-green-500" />
               </Button>
-
               <Button
                 type="button"
-                variant="secondary"
-                className="font-semibold ml-2"
-                onClick={() => {
-                  form.setValue("units", form.watch("units").slice(0, -1));
-                }}
-                disabled={isPending}
+                variant="outline"
+                onClick={() => form.setValue("units", form.watch("units").slice(0, -1))}
+                disabled={isPending || form.watch("units").length <= 1}
               >
+                <Trash className="w-4 h-4 mr-2" />
                 Remove Unit
-                <Trash className="w-4 h-4 ml-2 text-red-500" />
               </Button>
             </div>
-            <Separator className="flex-[1]" />
+
+            <Separator />
+
+            <Button
+              disabled={isPending}
+              type="submit"
+              className="w-full"
+              size="lg"
+            >
+              {isPending ? (
+                <>
+                  <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                  Generating Course...
+                </>
+              ) : (
+                'Create Course'
+              )}
+            </Button>
+          </form>
+        </Form>
+        {!isPro && (
+          <div className="mt-6">
+            <SubscriptionAction />
           </div>
-          <Button
-            disabled={isPending}
-            type="submit"
-            className="w-full mt-6"
-            size="lg"
-          >
-            {isPending ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                Generating Course...
-              </>
-            ) : (
-              'Create Course'
-            )}
-          </Button>
-        </form>
-      </Form>
-      {!isPro && <SubscriptionAction />}
-    </div>
+        )}
+      </CardContent>
+    </Card>
   );
 };
 
