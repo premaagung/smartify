@@ -15,13 +15,13 @@ type Props = {
 
 const CourseSideBar = ({ course, currentChapterId }: Props) => {
   return (
-    <div className="w-[400px] fixed top-0 bottom-0 p-6 rounded-r-3xl bg-secondary overflow-y-auto shadow-lg">
+    <div className="fixed top-0 bottom-0 left-0 w-[300px] lg:w-[400px] bg-secondary shadow-lg overflow-y-auto">
       {/* Fixed top section for the course title */}
-      <div className="sticky top-0 bg-secondary py-4 pt-12">
-      <h1 className="text-4xl font-bold text-dark">{course.name}</h1>
-      <Separator className="mt-2 text-gray-500 bg-gray-500" />
+      <div className="sticky top-0 bg-secondary py-4 pt-12 z-20">
+        <h1 className="text-4xl font-bold text-dark">{course.name}</h1>
+        <Separator className="mt-2 text-gray-500 bg-gray-500" />
       </div>
-      <div className="mt-6">
+      <div className="mt-6 px-4">
         {course.units.map((unit, unitIndex) => (
           <div key={unit.id} className="mt-6">
             <h2 className="text-sm uppercase text-secondary-foreground/70 mb-2">
@@ -42,7 +42,7 @@ const CourseSideBar = ({ course, currentChapterId }: Props) => {
               </div>
             ))}
             <Separator className="mt-2 text-gray-500 bg-gray-500" />
-            </div>
+          </div>
         ))}
       </div>
     </div>
