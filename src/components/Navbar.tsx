@@ -14,7 +14,7 @@ const Navbar = async () => {
       <div className="container flex h-full items-center justify-between px-4 lg:px-6">
         {/* Smartify Button */}
         <div className="flex items-center gap-2">
-          <Link href="https://smartify-project.vercel.app/">
+          <Link href="https://smartify.cakrawala.live/">
             <Button variant="outline" className="text-sm font-bold px-2 py-1 lg:text-base lg:px-4 lg:py-2">
               Smartify
             </Button>
