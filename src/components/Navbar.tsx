@@ -15,7 +15,10 @@ const Navbar = async () => {
         {/* Smartify Button */}
         <div className="flex items-center gap-2">
           <Link href="https://smartify.cakrawala.live/">
-            <Button variant="outline" className="text-sm font-bold px-2 py-1 lg:text-base lg:px-4 lg:py-2">
+            <Button 
+              variant="outline" 
+              className="text-sm font-semibold px-4 py-2 lg:text-base lg:px-6 lg:py-3 rounded-md bg-gradient-to-r from-blue-500 to-purple-600 text-white border-0 hover:from-blue-600 hover:to-purple-700 transition-all duration-300 ease-in-out shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              >
               Smartify
             </Button>
           </Link>
