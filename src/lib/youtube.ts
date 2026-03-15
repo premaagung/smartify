@@ -1,62 +1,51 @@
 import axios from "axios";
-import { YoutubeTranscript } from "youtube-transcript";
 import { strict_output } from "./gemini";
 
 export async function searchYoutube(searchQuery: string) {
-  // hello world => hello+world
   searchQuery = encodeURIComponent(searchQuery);
-  const { data } = await axios.get(
-    `https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBE_API_KEY}&q=${searchQuery}&videoDuration=medium&videoEmbeddable=true&type=video&maxResults=5`
-  );
-  if (!data) {
-    console.log("youtube fail");
-    return null;
-  }
-  if (data.items[0] == undefined) {
-    console.log("youtube fail");
-    return null;
-  }
-  return data.items[0].id.videoId;
-}
-
-export async function getTranscript(videoId: string) {
   try {
-    let transcript_arr = await YoutubeTranscript.fetchTranscript(videoId, {
-      lang: "en",
-    });
-    let transcript = "";
-    for (let t of transcript_arr) {
-      transcript += t.text + " ";
+    const { data } = await axios.get(
+      `https://www.googleapis.com/youtube/v3/search?key=${process.env.YOUTUBE_API_KEY}&q=${searchQuery}&videoDuration=medium&videoEmbeddable=true&type=video&maxResults=5`
+    );
+    if (!data) {
+      console.log("youtube fail: no data returned");
+      return null;
     }
-    return transcript.replaceAll("\n", "");
-  } catch (error) {
-    return "";
+    if (!data.items || data.items.length === 0) {
+      console.log("youtube fail: no items in response");
+      return null;
+    }
+    return data.items[0].id.videoId;
+  } catch (error: any) {
+    console.log("YouTube API error:", JSON.stringify(error.response?.data, null, 2));
+    return null;
   }
 }
 
 export async function getQuestionsFromTranscript(
-    transcript: string,
-    course_title: string
-  ) {
-    type Question = {
-      question: string;
-      answer: string;
-      option1: string;
-      option2: string;
-      option3: string;
-    };
-    const questions: Question[] = await strict_output(
-        "You are a helpful AI that is able to generate mcq questions and answers, the length of each answer should not be more than 15 words",
-        new Array(5).fill(
-          `You are to generate a random hard mcq question about ${course_title} with context of the following transcript: ${transcript}`
-        ),
-        {
-          question: "question",
-          answer: "answer with max length of 15 words",
-          option1: "option1 with max length of 15 words",
-          option2: "option2 with max length of 15 words",
-          option3: "option3 with max length of 15 words",
-        }
-      );
-      return questions;
+  context: string,
+  course_title: string
+) {
+  type Question = {
+    question: string;
+    answer: string;
+    option1: string;
+    option2: string;
+    option3: string;
+  };
+
+  const questions: Question[] = await strict_output(
+    "You are a helpful AI that generates mcq questions and answers. Each answer must not exceed 15 words. Never use curly quotes or smart quotes — only use straight quotes.",
+    new Array(5).fill(
+      `Generate a hard mcq question about ${course_title} based on this context: ${context}`
+    ),
+    {
+      question: "question",
+      answer: "answer with max length of 15 words",
+      option1: "option1 with max length of 15 words",
+      option2: "option2 with max length of 15 words",
+      option3: "option3 with max length of 15 words",
     }
+  );
+  return questions;
+}

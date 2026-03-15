@@ -1,18 +1,18 @@
-"use client"
+"use client";
 
-import React from "react";
-import { Button } from "./ui/button";
-import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { LogIn } from "lucide-react";
 
-type Props = {}
-const SignInButton = (props: Props) => {
-    return ( 
-        <Button variant="ghost" onClick={()=>{
-            signIn("google");
-        }}>
-            Sign In
-        </Button>
-    )
-}
- 
+const SignInButton = () => {
+  return (
+    <Link
+      href="/auth"
+      className="flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold rounded-lg transition-all duration-150 shadow-md shadow-emerald-500/20"
+    >
+      <LogIn className="w-4 h-4" />
+      Sign In
+    </Link>
+  );
+};
+
 export default SignInButton;

@@ -1,110 +1,90 @@
-import { GoogleGenerativeAI, GenerativeModel } from "@google/generative-ai";
+// src/lib/gemini.ts
+// Replace entire file with this
 
-// Use a non-null assertion operator or provide a default value
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+import axios from "axios";
 
-interface OutputFormat {
-  [key: string]: string | string[] | OutputFormat;
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY!;
+const MODEL = process.env.OPENROUTER_MODEL || "openrouter/hunter-alpha";
+
+// Strip markdown code fences and normalize quotes
+function cleanJSON(text: string): string {
+  return text
+    .replace(/```json\s*/gi, "")
+    .replace(/```\s*/g, "")
+    .replace(/[\u2018\u2019]/g, "'")
+    .replace(/[\u201C\u201D]/g, '"')
+    .trim();
 }
 
 export async function strict_output(
   system_prompt: string,
   user_prompt: string | string[],
-  output_format: OutputFormat,
-  default_category: string = "",
-  output_value_only: boolean = false,
-  model_name: string = "gemini-pro",
-  temperature: number = 1,
-  num_tries: number = 3,
-  verbose: boolean = false
-) {
-  const list_input: boolean = Array.isArray(user_prompt);
-  const dynamic_elements: boolean = /<.*?>/.test(JSON.stringify(output_format));
-  const list_output: boolean = /\[.*?\]/.test(JSON.stringify(output_format));
+  output_format: Record<string, string>,
+  temperature: number = 1
+): Promise<any> {
+  const isArray = Array.isArray(user_prompt);
+  const prompts = isArray ? user_prompt : [user_prompt];
+  const results: any[] = [];
 
-  let error_msg: string = "";
-  let res: string = "";
-
-  for (let i = 0; i < num_tries; i++) {
-    let output_format_prompt: string = `\nYou are to output ${
-      list_output ? "an array of objects in" : ""
-    } the following in json format: ${JSON.stringify(
-      output_format
-    )}. \nDo not put quotation marks or escape character \\ in the output fields.`;
-
-    if (list_output) {
-      output_format_prompt += `\nIf output field is a list, classify output into the best element of the list.`;
-    }
-
-    if (dynamic_elements) {
-      output_format_prompt += `\nAny text enclosed by < and > indicates you must generate content to replace it. Example input: Go to <location>, Example output: Go to the garden\nAny output key containing < and > indicates you must generate the key name to replace it. Example input: {'<location>': 'description of location'}, Example output: {school: a place for education}`;
-    }
-
-    if (list_input) {
-      output_format_prompt += `\nGenerate an array of json, one json for each input element.`;
-    }
-
-    const model: GenerativeModel = genAI.getGenerativeModel({ model: model_name });
-    const prompt = system_prompt + output_format_prompt + error_msg + "\n\n" + user_prompt.toString();
+  for (const prompt of prompts) {
+    const messages = [
+      {
+        role: "system",
+        content: `${system_prompt}
+You must respond ONLY with a valid JSON object matching this exact format:
+${JSON.stringify(output_format, null, 2)}
+No explanation, no markdown, no code fences. Just the raw JSON object.`,
+      },
+      {
+        role: "user",
+        content: prompt,
+      },
+    ];
 
     try {
-      const result = await model.generateContent(prompt);
-      const response = await result.response;
-      res = response.text();
-      res = res.replace(/'/g, '"').replace(/(\w)"(\w)/g, "$1'$2");
-
-      if (verbose) {
-        console.log("System prompt:", system_prompt + output_format_prompt + error_msg);
-        console.log("\nUser prompt:", user_prompt);
-        console.log("\nGemini response:", res);
-      }
-
-      let output: any = JSON.parse(res);
-
-      if (list_input) {
-        if (!Array.isArray(output)) {
-          throw new Error("Output format not in an array of json");
+      const response = await axios.post(
+        "https://openrouter.ai/api/v1/chat/completions",
+        {
+          model: MODEL,
+          messages,
+          temperature,
+          response_format: { type: "json_object" }, // forces JSON output on supported models
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
+            "Content-Type": "application/json",
+            "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
+            "X-Title": "Smartify LMS",
+          },
         }
-      } else {
-        output = [output];
-      }
+      );
 
-      for (let index = 0; index < output.length; index++) {
-        for (const key in output_format) {
-          if (/<.*?>/.test(key)) {
-            continue;
-          }
-          if (!(key in output[index])) {
-            throw new Error(`${key} not in json output`);
-          }
-          if (Array.isArray(output_format[key])) {
-            const choices = output_format[key] as string[];
-            if (Array.isArray(output[index][key])) {
-              output[index][key] = output[index][key][0];
-            }
-            if (!choices.includes(output[index][key]) && default_category) {
-              output[index][key] = default_category;
-            }
-            if (output[index][key].includes(":")) {
-              output[index][key] = output[index][key].split(":")[0];
-            }
-          }
-        }
-        if (output_value_only) {
-          output[index] = Object.values(output[index]);
-          if (output[index].length === 1) {
-            output[index] = output[index][0];
-          }
-        }
-      }
+      const raw = response.data.choices?.[0]?.message?.content ?? "";
+      const cleaned = cleanJSON(raw);
 
-      return list_input ? output : output[0];
-    } catch (e) {
-      error_msg = `\n\nResult: ${res}\n\nError message: ${e}`;
-      console.log("An exception occurred:", e);
-      console.log("Current invalid json format ", res);
+      try {
+        const parsed = JSON.parse(cleaned);
+        results.push(parsed);
+      } catch {
+        console.error("JSON parse error. Raw response:", raw);
+        results.push({});
+      }
+    } catch (error: any) {
+      // Rate limit handling
+      if (error?.response?.status === 429) {
+        console.warn("OpenRouter rate limit hit (429). Stopping retries.");
+        throw { status: 429, message: "Rate limit exceeded" };
+      }
+      // Insufficient credits
+      if (error?.response?.status === 402) {
+        console.error("OpenRouter insufficient credits.");
+        throw { status: 402, message: "Insufficient credits" };
+      }
+      console.error("OpenRouter API error:", error?.response?.data || error.message);
+      throw error;
     }
   }
 
-  return [];
+  return isArray ? results : results[0];
 }

@@ -41,12 +41,14 @@ model User {
   id            String    @id @default(cuid())
   name          String?
   email         String?   @unique
+  password      String?
   emailVerified DateTime?
   image    String?
   credits Int @default(10)
 
   accounts Account[]
   sessions Session[]
+  chapterProgress UserChapterProgress[]
 }
 
 model Course {
@@ -76,8 +78,10 @@ model Chapter {
   videoId String?
   summary String? @db.VarChar(3000)
   unit Unit @relation(fields: [unitId], references: [id])
-  questions Question[]
 
+  questions Question[]
+  progress UserChapterProgress[]
+  
   @@index([unitId], name: "unitId")
 }
 
@@ -100,4 +104,22 @@ model UserSubscription {
   stripeSubscriptionId   String?   @unique @map(name: "stripe_subscription_id")
   stripePriceId          String?   @map(name: "stripe_price_id")
   stripeCurrentPeriodEnd DateTime? @map(name: "stripe_current_period_end")
+}
+
+model UserChapterProgress {
+  id        String   @id @default(cuid())
+  userId    String
+  chapterId String
+  completed Boolean  @default(false)
+  score     Int      @default(0)
+  total     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId])
+  @@index([userId])
+  @@index([chapterId])
 }
