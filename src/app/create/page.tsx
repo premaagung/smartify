@@ -29,7 +29,6 @@ const CreatePage = async () => {
                 Enter a topic and define your units. Our AI will generate structured chapters, find curated videos, and write summaries and quizzes for each one.
               </p>
             </div>
-
             <div className="bg-[#041123] border border-slate-800 rounded-2xl p-6 sm:p-8">
               <CreateCourseForm isPro={isPro} />
             </div>
@@ -37,12 +36,8 @@ const CreatePage = async () => {
 
           {/* Right — Info panel */}
           <div className="lg:sticky lg:top-24 space-y-4">
-
-            {/* What gets generated */}
             <div className="bg-[#041123] border border-slate-800 rounded-xl p-6">
-              <h3 className="text-sm font-semibold text-white mb-5">
-                What gets generated
-              </h3>
+              <h3 className="text-sm font-semibold text-white mb-5">What gets generated</h3>
               <div className="space-y-4">
                 {[
                   { icon: BookOpen, title: "Chapter Titles", desc: "Logical chapter names created for each unit you define." },
@@ -62,8 +57,6 @@ const CreatePage = async () => {
                 ))}
               </div>
             </div>
-
-            {/* Tip */}
             <div className="bg-emerald-500/8 border border-emerald-500/20 rounded-xl p-5">
               <div className="flex items-start gap-3">
                 <div className="w-7 h-7 rounded-lg bg-emerald-500/15 flex items-center justify-center shrink-0 mt-0.5">
@@ -77,15 +70,12 @@ const CreatePage = async () => {
                 </div>
               </div>
             </div>
-
-            {/* Time estimate */}
             <div className="bg-[#041123] border border-slate-800 rounded-xl p-5">
               <p className="text-xs text-slate-500 leading-relaxed">
                 ⏱ Course generation takes about{" "}
                 <span className="text-slate-300 font-medium">30–60 seconds</span> depending on the number of units. Chapters are generated one by one to stay within API limits.
               </p>
             </div>
-
           </div>
         </div>
       </div>
