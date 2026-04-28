@@ -1,24 +1,62 @@
-import SubscriptionButton from "@/components/SubscriptionButton";
-import { checkSubscription } from "@/lib/subscription";
 import { getAuthSession } from "@/lib/auth";
 import { prisma } from "@/lib/db";
 import { redirect } from "next/navigation";
-import { Crown, Zap, CheckCircle2, BookOpen, BarChart3, Shield, User } from "lucide-react";
+import {
+  CheckCircle2, BarChart3, Shield, User,
+  BookOpen, GraduationCap, Trophy, Target,
+} from "lucide-react";
 
 const SettingsPage = async () => {
   const session = await getAuthSession();
   if (!session?.user) redirect("/gallery");
 
-  const isPro = await checkSubscription();
-
   const user = await prisma.user.findUnique({
     where: { id: session.user.id },
-    include: {
-      _count: false,
-    },
   });
 
-  const credits = user?.credits ?? 0;
+  // Learning stats from UserChapterProgress
+  const progressRecords = await prisma.userChapterProgress.findMany({
+    where: { userId: session.user.id },
+    include: { chapter: { include: { unit: { include: { course: true } } } } },
+  });
+
+  const completedChapters = progressRecords.filter((p) => p.completed).length;
+  const totalAttempted = progressRecords.length;
+
+  // Quiz performance
+  const quizAttempts = progressRecords.filter((p) => p.total > 0);
+  const avgScore =
+    quizAttempts.length > 0
+      ? Math.round(
+          quizAttempts.reduce((acc, p) => acc + (p.score / p.total) * 100, 0) /
+            quizAttempts.length
+        )
+      : 0;
+
+  const perfectScores = quizAttempts.filter(
+    (p) => p.score === p.total && p.total > 0
+  ).length;
+
+  // Courses in progress
+  const courseMap = new Map<string, { name: string; completed: number; total: number }>();
+  for (const p of progressRecords) {
+    const course = p.chapter.unit.course;
+    if (!courseMap.has(course.id)) {
+      courseMap.set(course.id, { name: course.name, completed: 0, total: 0 });
+    }
+    const entry = courseMap.get(course.id)!;
+    entry.total += 1;
+    if (p.completed) entry.completed += 1;
+  }
+  const activeCourses = Array.from(courseMap.values());
+
+  // Total chapters across all courses
+  const totalChapters = await prisma.chapter.count();
+
+  const overallPercent =
+    totalChapters > 0
+      ? Math.round((completedChapters / totalChapters) * 100)
+      : 0;
 
   return (
     <div className="min-h-screen bg-[#020B18]">
@@ -27,7 +65,7 @@ const SettingsPage = async () => {
         {/* Header */}
         <div className="mb-10">
           <h1 className="text-3xl font-bold text-white mb-1">Settings</h1>
-          <p className="text-slate-500">Manage your account and subscription</p>
+          <p className="text-slate-500">Your account and learning overview</p>
         </div>
 
         <div className="space-y-6">
@@ -55,132 +93,83 @@ const SettingsPage = async () => {
                 <p className="text-sm text-slate-500">{session.user.email}</p>
               </div>
               <div className="ml-auto">
-                <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border ${
-                  isPro
-                    ? "bg-amber-500/10 border-amber-500/30 text-amber-400"
-                    : "bg-slate-800 border-slate-700 text-slate-400"
-                }`}>
-                  {isPro ? <Crown className="w-3.5 h-3.5" /> : <Zap className="w-3.5 h-3.5" />}
-                  {isPro ? "Pro Plan" : "Free Plan"}
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
+                  <GraduationCap className="w-3.5 h-3.5" />
+                  Learner
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Credits card */}
+          {/* Stats row */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            {[
+              { label: "Chapters Completed", value: completedChapters, icon: CheckCircle2, color: "text-emerald-400" },
+              { label: "Quizzes Taken", value: quizAttempts.length, icon: Target, color: "text-blue-400" },
+              { label: "Avg Quiz Score", value: `${avgScore}%`, icon: BarChart3, color: avgScore >= 80 ? "text-emerald-400" : avgScore >= 60 ? "text-amber-400" : "text-red-400" },
+              { label: "Perfect Scores", value: perfectScores, icon: Trophy, color: "text-amber-400" },
+            ].map(({ label, value, icon: Icon, color }) => (
+              <div key={label} className="bg-[#041123] border border-slate-800 rounded-xl p-5 flex flex-col items-center text-center">
+                <Icon className={`w-5 h-5 mb-2 ${color}`} />
+                <p className={`text-2xl font-bold ${color}`}>{value}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{label}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Overall progress */}
           <div className="bg-[#041123] border border-slate-800 rounded-xl p-6">
             <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-emerald-400" />
-              Usage
+              Learning Progress
             </h2>
-            <div className="flex items-center justify-between mb-3">
-              <div>
-                <p className="text-2xl font-bold text-white">{credits}</p>
-                <p className="text-sm text-slate-500">course credits remaining</p>
-              </div>
-              {isPro && (
-                <span className="text-xs text-emerald-400 font-medium px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-                  Unlimited with Pro
-                </span>
-              )}
+
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-sm text-slate-400">Overall completion</p>
+              <p className="text-sm font-bold text-white">{completedChapters}/{totalChapters} chapters</p>
             </div>
-            <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div className="h-2 bg-slate-800 rounded-full overflow-hidden mb-6">
               <div
-                className={`h-full rounded-full transition-all ${
-                  credits > 5 ? "bg-emerald-500" : credits > 2 ? "bg-amber-500" : "bg-red-500"
-                }`}
-                style={{ width: isPro ? "100%" : `${Math.min((credits / 10) * 100, 100)}%` }}
+                className="h-full rounded-full bg-emerald-500 transition-all duration-500"
+                style={{ width: `${overallPercent}%` }}
               />
             </div>
-            {!isPro && (
-              <p className="text-xs text-slate-600 mt-2">
-                Each course creation uses 1 credit. Upgrade to Pro for unlimited courses.
-              </p>
-            )}
-          </div>
 
-          {/* Subscription card */}
-          <div className="bg-[#041123] border border-slate-800 rounded-xl p-6">
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2">
-              <Crown className="w-4 h-4 text-emerald-400" />
-              Subscription
-            </h2>
-
-            {isPro ? (
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
-                <div>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Crown className="w-5 h-5 text-amber-400" />
-                    <span className="text-lg font-bold text-white">Pro Plan</span>
-                  </div>
-                  <p className="text-sm text-slate-500 mb-4">
-                    You have access to all Pro features including unlimited course creation.
-                  </p>
-                  <div className="space-y-2">
-                    {[
-                      "Unlimited course creation",
-                      "Priority AI processing",
-                      "Advanced analytics",
-                    ].map((feature) => (
-                      <div key={feature} className="flex items-center gap-2 text-sm text-slate-400">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0" />
-                        {feature}
+            {/* Per-course breakdown */}
+            {activeCourses.length > 0 ? (
+              <div>
+                <p className="text-xs text-slate-500 uppercase tracking-wider mb-3">Courses in Progress</p>
+                <div className="space-y-3">
+                  {activeCourses.map((course) => {
+                    const pct = course.total > 0
+                      ? Math.round((course.completed / course.total) * 100)
+                      : 0;
+                    return (
+                      <div key={course.name}>
+                        <div className="flex items-center justify-between mb-1">
+                          <div className="flex items-center gap-2">
+                            <BookOpen className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                            <p className="text-sm text-slate-300 truncate max-w-xs">{course.name}</p>
+                          </div>
+                          <span className={`text-xs font-semibold ${pct === 100 ? "text-emerald-400" : "text-slate-400"}`}>
+                            {pct === 100 ? "✓ Complete" : `${course.completed}/${course.total}`}
+                          </span>
+                        </div>
+                        <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                          <div
+                            className={`h-full rounded-full transition-all duration-500 ${pct === 100 ? "bg-emerald-400" : "bg-emerald-600"}`}
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
                       </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="shrink-0">
-                  <SubscriptionButton isPro={isPro} />
+                    );
+                  })}
                 </div>
               </div>
             ) : (
-              <div>
-                {/* Pro plan pitch */}
-                <div className="grid sm:grid-cols-2 gap-4 mb-6">
-                  <div className="p-4 rounded-lg border border-slate-700 bg-slate-900/50">
-                    <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-3">
-                      Free Plan
-                    </h3>
-                    <div className="space-y-2">
-                      {[
-                        "10 course credits",
-                        "Basic AI generation",
-                        "YouTube video curation",
-                      ].map((f) => (
-                        <div key={f} className="flex items-center gap-2 text-sm text-slate-500">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-slate-600 shrink-0" />
-                          {f}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="p-4 rounded-lg border border-amber-500/30 bg-amber-500/5 relative overflow-hidden">
-                    <div className="absolute top-2 right-2 px-2 py-0.5 bg-amber-500 text-black text-[10px] font-bold rounded-full">
-                      RECOMMENDED
-                    </div>
-                    <h3 className="text-xs font-semibold text-amber-400 uppercase tracking-wide mb-3 flex items-center gap-1.5">
-                      <Crown className="w-3.5 h-3.5" />
-                      Pro Plan
-                    </h3>
-                    <div className="space-y-2">
-                      {[
-                        "Unlimited course creation",
-                        "Priority AI processing",
-                        "Advanced analytics",
-                        "Early access to new features",
-                      ].map((f) => (
-                        <div key={f} className="flex items-center gap-2 text-sm text-amber-300/80">
-                          <CheckCircle2 className="w-3.5 h-3.5 text-amber-400 shrink-0" />
-                          {f}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <SubscriptionButton isPro={isPro} />
-              </div>
+              <p className="text-sm text-slate-600 text-center py-4">
+                No learning activity yet — start a course to track your progress.
+              </p>
             )}
           </div>
 

@@ -7,7 +7,6 @@ import { strict_output } from "@/lib/gemini";
 import { getUnsplashImage } from "@/lib/unsplash";
 import { prisma } from "@/lib/db";
 import { getAuthSession } from "@/lib/auth";
-import { checkSubscription } from "@/lib/subscription";
 
 export async function POST(req: Request, res: Response) {
   try {
@@ -16,8 +15,7 @@ export async function POST(req: Request, res: Response) {
       return new NextResponse("unauthorised", { status: 401 });
     }
 
-    const isPro = await checkSubscription();
-    if (session.user.credits <= 0 && !isPro) {
+    if (session.user.credits <= 0) {
       return new NextResponse("no credits", { status: 402 });
     }
 

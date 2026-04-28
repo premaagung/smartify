@@ -1,14 +1,11 @@
 import { getAuthSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
-import { checkSubscription } from "@/lib/subscription";
 import CreateCourseForm from "@/components/CreateCourseForm";
 import { Zap, BookOpen, Video, BarChart3, Lightbulb } from "lucide-react";
 
 const CreatePage = async () => {
   const session = await getAuthSession();
   if (!session?.user) redirect("/gallery");
-
-  const isPro = await checkSubscription();
 
   return (
     <div className="min-h-screen bg-[#020B18]">
@@ -30,7 +27,7 @@ const CreatePage = async () => {
               </p>
             </div>
             <div className="bg-[#041123] border border-slate-800 rounded-2xl p-6 sm:p-8">
-              <CreateCourseForm isPro={isPro} />
+              <CreateCourseForm isPro={false} />
             </div>
           </div>
 

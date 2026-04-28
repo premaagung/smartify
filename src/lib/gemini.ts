@@ -1,19 +1,18 @@
 // src/lib/gemini.ts
 
-import axios from "axios";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY!;
-const MODEL = process.env.OPENROUTER_MODEL || "openrouter/hunter-alpha";
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
 
-// Strip markdown code fences, normalize quotes, and fix trailing commas
 function cleanJSON(text: string): string {
   return text
     .replace(/```json\s*/gi, "")
     .replace(/```\s*/g, "")
     .replace(/[\u2018\u2019]/g, "'")
     .replace(/[\u201C\u201D]/g, '"')
-    .replace(/,\s*}/g, "}")   // remove trailing commas before }
-    .replace(/,\s*]/g, "]")   // remove trailing commas before ]
+    .replace(/,\s*}/g, "}")
+    .replace(/,\s*]/g, "]")
     .trim();
 }
 
@@ -27,47 +26,27 @@ export async function strict_output(
   const prompts = isArray ? user_prompt : [user_prompt];
   const results: any[] = [];
 
-  for (const prompt of prompts) {
-    const messages = [
-      {
-        role: "system",
-        content: `${system_prompt}
+  const model = genAI.getGenerativeModel({
+    model: MODEL,
+    generationConfig: {
+      temperature,
+      responseMimeType: "application/json",
+    },
+    systemInstruction: `${system_prompt}
 You must respond ONLY with a valid JSON object matching this exact format:
 ${JSON.stringify(output_format, null, 2)}
 No explanation, no markdown, no code fences. Just the raw JSON object.`,
-      },
-      {
-        role: "user",
-        content: prompt,
-      },
-    ];
+  });
 
+  for (const prompt of prompts) {
     try {
-      const response = await axios.post(
-        "https://openrouter.ai/api/v1/chat/completions",
-        {
-          model: MODEL,
-          messages,
-          temperature,
-          response_format: { type: "json_object" },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${OPENROUTER_API_KEY}`,
-            "Content-Type": "application/json",
-            "HTTP-Referer": process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000",
-            "X-Title": "Smartify LMS",
-          },
-        }
-      );
-
-      const raw = response.data.choices?.[0]?.message?.content ?? "";
+      const result = await model.generateContent(prompt);
+      const raw = result.response.text();
       const cleaned = cleanJSON(raw);
 
       try {
         const parsed = JSON.parse(cleaned);
 
-        // Guard: replace any undefined/null answers with empty string
         if (parsed.questions && Array.isArray(parsed.questions)) {
           parsed.questions = parsed.questions.map((q: any) => ({
             ...q,
@@ -84,17 +63,11 @@ No explanation, no markdown, no code fences. Just the raw JSON object.`,
         results.push({});
       }
     } catch (error: any) {
-      // Rate limit handling
-      if (error?.response?.status === 429) {
-        console.warn("OpenRouter rate limit hit (429). Stopping retries.");
+      if (error?.status === 429) {
+        console.warn("Gemini rate limit hit (429).");
         throw { status: 429, message: "Rate limit exceeded" };
       }
-      // Insufficient credits
-      if (error?.response?.status === 402) {
-        console.error("OpenRouter insufficient credits.");
-        throw { status: 402, message: "Insufficient credits" };
-      }
-      console.error("OpenRouter API error:", error?.response?.data || error.message);
+      console.error("Gemini API error:", error?.message);
       throw error;
     }
   }

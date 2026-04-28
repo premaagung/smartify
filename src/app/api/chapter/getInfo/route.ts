@@ -41,7 +41,7 @@ export async function POST(req: Request, res: Response) {
       `Generate educational content for the chapter: ${chapter.name}`,
       {
         summary: "a concise 250 word or less educational summary of this chapter topic",
-        questions: "a JSON array of 5 multiple choice questions, each with fields: question, answer, option1, option2, option3. Each answer/option must be 15 words or less.",
+        questions: "a JSON array of 5 multiple choice questions, each with fields: question, answer, option1, option2, option3, option4. Each answer/option must be 15 words or less.",
       }
     );
 
@@ -71,11 +71,12 @@ export async function POST(req: Request, res: Response) {
       await prisma.question.createMany({
         data: questions.map((question: any) => {
           let options = [
-            question.answer,
             question.option1,
             question.option2,
             question.option3,
-          ];
+            question.option4,
+          ].filter((o) => o !== undefined && o !== null && o !== "");
+
           options = options.sort(() => Math.random() - 0.5);
           return {
             question: question.question,
