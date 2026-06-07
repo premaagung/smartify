@@ -326,4 +326,4 @@ This project is developed as an undergraduate thesis prototype at Institut Tekno
 - Sekolah Pariwisata Mediterranean Bali — research location and stakeholder
 - Google Gemini API — LLM provider
 - ITB STIKOM Bali — academic institution
-- Dosen Pembimbing: I Nyoman Rudy Hendrawan, S.Kom., M.Kom. and Ir. Putu Adi Guna Permana, S.Kom., M.Kom.
+- Dosen Pembimbing: I Nyoman Rudy Hendrawan, S.Kom., M.Kom. and Ir. Putu Adi Guna Permana, S.Kom., M.Kom.# test CI/CD
