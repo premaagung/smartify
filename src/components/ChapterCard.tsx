@@ -118,7 +118,7 @@ const ChapterCard = React.forwardRef<ChapterCardHandler, Props>(
           "flex items-center justify-between px-4 py-3 rounded-lg border transition-all duration-200",
           isDone   && "bg-emerald-500/10 border-emerald-500/30",
           isFailed && "bg-red-500/10 border-red-500/30",
-          !isDone && !isFailed && "bg-slate-900/50 border-slate-800"
+          !isDone && !isFailed && "bg-muted/50 border-border"
         )}>
           {/* Left — status + name */}
           <div className="flex items-center gap-3 min-w-0 flex-1">
@@ -133,7 +133,7 @@ const ChapterCard = React.forwardRef<ChapterCardHandler, Props>(
             )}
 
             <div className="min-w-0">
-              <span className="text-xs text-slate-500 mr-1.5">Ch. {chapterIndex + 1}</span>
+              <span className="text-xs text-muted-foreground mr-1.5">Ch. {chapterIndex + 1}</span>
               <span className={cn(
                 "text-sm",
                 isDone ? "text-emerald-300" : isFailed ? "text-red-300" : "text-slate-300"

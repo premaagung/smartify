@@ -8,7 +8,7 @@ const CreatePage = async () => {
   if (!session?.user) redirect("/gallery");
 
   return (
-    <div className="min-h-screen bg-[#020B18]">
+    <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-[1fr_380px] gap-12 items-start">
 
@@ -19,22 +19,22 @@ const CreatePage = async () => {
                 <Zap className="w-3.5 h-3.5" />
                 AI Course Generator
               </div>
-              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-3">
+              <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-3">
                 Create a New Course
               </h1>
-              <p className="text-slate-400 text-base leading-relaxed max-w-lg">
+              <p className="text-muted-foreground text-base leading-relaxed max-w-lg">
                 Enter a topic and define your units. Our AI will generate structured chapters, find curated videos, and write summaries and quizzes for each one.
               </p>
             </div>
-            <div className="bg-[#041123] border border-slate-800 rounded-2xl p-6 sm:p-8">
+            <div className="bg-card border border-border rounded-2xl p-6 sm:p-8">
               <CreateCourseForm isPro={false} />
             </div>
           </div>
 
           {/* Right — Info panel */}
           <div className="lg:sticky lg:top-24 space-y-4">
-            <div className="bg-[#041123] border border-slate-800 rounded-xl p-6">
-              <h3 className="text-sm font-semibold text-white mb-5">What gets generated</h3>
+            <div className="bg-card border border-border rounded-xl p-6">
+              <h3 className="text-sm font-semibold text-foreground mb-5">What gets generated</h3>
               <div className="space-y-4">
                 {[
                   { icon: BookOpen, title: "Chapter Titles", desc: "Logical chapter names created for each unit you define." },
@@ -47,8 +47,8 @@ const CreatePage = async () => {
                       <item.icon className="w-4 h-4 text-emerald-400" />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-white">{item.title}</p>
-                      <p className="text-xs text-slate-500 mt-0.5 leading-relaxed">{item.desc}</p>
+                      <p className="text-sm font-medium text-foreground">{item.title}</p>
+                      <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -67,8 +67,8 @@ const CreatePage = async () => {
                 </div>
               </div>
             </div>
-            <div className="bg-[#041123] border border-slate-800 rounded-xl p-5">
-              <p className="text-xs text-slate-500 leading-relaxed">
+            <div className="bg-card border border-border rounded-xl p-5">
+              <p className="text-xs text-muted-foreground leading-relaxed">
                 ⏱ Course generation takes about{" "}
                 <span className="text-slate-300 font-medium">30–60 seconds</span> depending on the number of units. Chapters are generated one by one to stay within API limits.
               </p>

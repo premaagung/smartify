@@ -13,7 +13,7 @@ export default async function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020B18] flex items-center justify-center px-4 py-16 relative overflow-hidden">
+    <div className="min-h-screen bg-background flex items-center justify-center px-4 py-16 relative overflow-hidden">
       {/* Background glows */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-emerald-500/5 blur-[140px]" />

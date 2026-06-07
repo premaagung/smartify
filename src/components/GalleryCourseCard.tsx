@@ -52,7 +52,7 @@ const GalleryCourseCard = ({ course, completedChapterIds = [] }: Props) => {
 
   return (
     <>
-      <div className="group relative flex flex-col bg-[#041123] border border-slate-800 rounded-xl overflow-hidden hover:border-emerald-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/20 hover:-translate-y-1">
+      <div className="group relative flex flex-col bg-card border border-border rounded-xl overflow-hidden hover:border-emerald-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/20 hover:-translate-y-1">
 
         {/* Edit button — top left, appears on hover */}
         <Link
@@ -79,7 +79,7 @@ const GalleryCourseCard = ({ course, completedChapterIds = [] }: Props) => {
 
         <Link href={`/course/${course.id}/0/0`} className="flex flex-col flex-1">
           {/* Thumbnail */}
-          <div className="relative aspect-video bg-slate-800 overflow-hidden">
+          <div className="relative aspect-video bg-muted overflow-hidden">
             {course.image ? (
               <Image
                 src={course.image}
@@ -94,15 +94,15 @@ const GalleryCourseCard = ({ course, completedChapterIds = [] }: Props) => {
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-3">
-              <h3 className="text-sm font-semibold text-white leading-snug line-clamp-2 drop-shadow-md">
+              <h3 className="text-sm font-semibold text-foreground leading-snug line-clamp-2 drop-shadow-md">
                 {course.name}
               </h3>
             </div>
-            <div className="absolute top-2 right-2 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-md text-xs text-white/90 font-medium">
+            <div className="absolute top-2 right-2 px-2 py-1 bg-black/60 backdrop-blur-sm rounded-md text-xs text-foreground/90 font-medium">
               {course.units.length} unit{course.units.length !== 1 ? "s" : ""}
             </div>
             {isComplete && (
-              <div className="absolute top-2 left-2 px-2 py-1 bg-emerald-500/90 backdrop-blur-sm rounded-md text-xs text-white font-semibold">
+              <div className="absolute top-2 left-2 px-2 py-1 bg-emerald-500/90 backdrop-blur-sm rounded-md text-xs text-foreground font-semibold">
                 ✓ Complete
               </div>
             )}
@@ -113,10 +113,10 @@ const GalleryCourseCard = ({ course, completedChapterIds = [] }: Props) => {
             <ul className="flex-1 space-y-1.5 mb-4">
               {course.units.slice(0, 4).map((unit, unitIndex) => (
                 <li key={unit.id} className="flex items-start gap-2">
-                  <span className="mt-0.5 w-4 h-4 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-500 shrink-0">
+                  <span className="mt-0.5 w-4 h-4 rounded-full bg-muted border border-slate-700 flex items-center justify-center text-[10px] font-bold text-muted-foreground shrink-0">
                     {unitIndex + 1}
                   </span>
-                  <span className="text-xs text-slate-500 leading-snug line-clamp-1 group-hover:text-slate-400 transition-colors">
+                  <span className="text-xs text-muted-foreground leading-snug line-clamp-1 group-hover:text-muted-foreground transition-colors">
                     {unit.name}
                   </span>
                 </li>
@@ -131,12 +131,12 @@ const GalleryCourseCard = ({ course, completedChapterIds = [] }: Props) => {
             {hasStarted && (
               <div className="mb-3">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Progress</span>
-                  <span className={cn("text-[10px] font-bold", isComplete ? "text-emerald-400" : "text-slate-400")}>
+                  <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Progress</span>
+                  <span className={cn("text-[10px] font-bold", isComplete ? "text-emerald-400" : "text-muted-foreground")}>
                     {completedCount}/{totalChapters} chapters
                   </span>
                 </div>
-                <div className="h-1 w-full bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
                   <div
                     className={cn("h-full rounded-full transition-all duration-500", isComplete ? "bg-emerald-400" : "bg-emerald-600")}
                     style={{ width: `${progressPercent}%` }}
@@ -145,7 +145,7 @@ const GalleryCourseCard = ({ course, completedChapterIds = [] }: Props) => {
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-3 border-t border-slate-800">
+            <div className="flex items-center justify-between pt-3 border-t border-border">
               <div className="flex items-center gap-1.5 text-xs text-slate-600">
                 <Clock className="w-3.5 h-3.5" />
                 {totalChapters} chapter{totalChapters !== 1 ? "s" : ""}
@@ -166,31 +166,31 @@ const GalleryCourseCard = ({ course, completedChapterIds = [] }: Props) => {
           onClick={() => !isDeleting && setShowConfirm(false)}
         >
           <div
-            className="bg-[#041123] border border-slate-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl"
+            className="bg-card border border-slate-700 rounded-2xl w-full max-w-sm p-6 shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center mb-4 mx-auto">
               <AlertTriangle className="w-6 h-6 text-red-400" />
             </div>
-            <h3 className="text-lg font-bold text-white text-center mb-2">Delete Course?</h3>
-            <p className="text-sm text-slate-400 text-center mb-1">
-              <span className="text-white font-medium">{course.name}</span>
+            <h3 className="text-lg font-bold text-foreground text-center mb-2">Delete Course?</h3>
+            <p className="text-sm text-muted-foreground text-center mb-1">
+              <span className="text-foreground font-medium">{course.name}</span>
             </p>
-            <p className="text-xs text-slate-500 text-center mb-6">
+            <p className="text-xs text-muted-foreground text-center mb-6">
               This will permanently delete the course, all chapters, quizzes, and progress data. This action cannot be undone.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => setShowConfirm(false)}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-2.5 rounded-lg border border-slate-700 text-sm font-medium text-slate-400 hover:text-white hover:border-slate-600 transition-all disabled:opacity-50"
+                className="flex-1 px-4 py-2.5 rounded-lg border border-slate-700 text-sm font-medium text-muted-foreground hover:text-foreground hover:border-slate-600 transition-all disabled:opacity-50"
               >
                 Cancel
               </button>
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="flex-1 px-4 py-2.5 rounded-lg bg-red-500 hover:bg-red-400 text-white text-sm font-semibold transition-all disabled:opacity-70 flex items-center justify-center gap-2"
+                className="flex-1 px-4 py-2.5 rounded-lg bg-red-500 hover:bg-red-400 text-foreground text-sm font-semibold transition-all disabled:opacity-70 flex items-center justify-center gap-2"
               >
                 {isDeleting ? (
                   <><Loader2 className="w-4 h-4 animate-spin" />Deleting...</>

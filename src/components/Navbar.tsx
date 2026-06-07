@@ -9,7 +9,7 @@ const Navbar = async () => {
   const session = await getAuthSession();
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-[10] h-16 border-b border-slate-800/80 bg-[#020B18]/90 backdrop-blur-md">
+    <nav className="fixed inset-x-0 top-0 z-[10] h-16 border-b border-border/80 bg-background/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto flex h-full items-center justify-between px-4 lg:px-8">
 
         {/* Logo */}
@@ -18,16 +18,16 @@ const Navbar = async () => {
           className="flex items-center gap-2.5 font-bold text-xl tracking-tight group shrink-0"
         >
           <div className="w-8 h-8 rounded-lg bg-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-500/30 group-hover:bg-emerald-400 transition-colors duration-150">
-            <BookOpen className="w-4 h-4 text-white" />
+            <BookOpen className="w-4 h-4 text-foreground" />
           </div>
-          <span className="text-white">Smartify</span>
+          <span className="text-foreground">Smartify</span>
         </Link>
 
         {/* Center nav links */}
         <div className="hidden md:flex items-center gap-1">
           <Link
             href="/gallery"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-150"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-150"
           >
             <GalleryHorizontal className="w-4 h-4" />
             Courses
@@ -37,21 +37,21 @@ const Navbar = async () => {
             <>
               <Link
                 href="/dashboard"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-150"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-150"
               >
                 <LayoutDashboard className="w-4 h-4" />
                 Dashboard
               </Link>
               <Link
                 href="/create"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-150"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-150"
               >
                 <PlusCircle className="w-4 h-4" />
                 Create Course
               </Link>
               <Link
                 href="/settings"
-                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 hover:text-white hover:bg-slate-800 transition-all duration-150"
+                className="flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted transition-all duration-150"
               >
                 <Settings className="w-4 h-4" />
                 Settings
@@ -62,7 +62,7 @@ const Navbar = async () => {
 
         {/* Right side */}
         <div className="flex items-center gap-2 lg:gap-3">
-          <ThemeToggle className="text-slate-400 hover:text-white" />
+          <ThemeToggle className="text-muted-foreground hover:text-foreground" />
 
           {session?.user ? (
             <UserAccountNav user={session.user} />

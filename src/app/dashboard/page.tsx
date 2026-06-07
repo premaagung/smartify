@@ -79,9 +79,9 @@ const DashboardPage = async () => {
   const completedCourses = courseStats.filter((s) => s.isComplete).length;
 
   return (
-    <div className="min-h-screen bg-[#020B18]">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b border-slate-800 bg-[#041123]">
+      <div className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10 pt-24">
           <div className="flex items-start gap-4">
             <div className="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/20 flex items-center justify-center shrink-0">
@@ -91,8 +91,8 @@ const DashboardPage = async () => {
               <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-1">
                 My Learning
               </p>
-              <h1 className="text-3xl font-bold text-white">Dashboard</h1>
-              <p className="text-slate-500 text-sm mt-1">
+              <h1 className="text-3xl font-bold text-foreground">Dashboard</h1>
+              <p className="text-muted-foreground text-sm mt-1">
                 Welcome back, {session.user.name?.split(" ")[0] ?? "there"} 👋
               </p>
             </div>
@@ -100,28 +100,28 @@ const DashboardPage = async () => {
 
           {/* Stats row */}
           <div className="grid grid-cols-3 gap-4 mt-8 max-w-lg">
-            <div className="bg-[#020B18] rounded-xl border border-slate-800 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="flex items-center gap-2 mb-1">
                 <Target className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Chapters</span>
+                <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Chapters</span>
               </div>
-              <p className="text-2xl font-black text-white">{totalCompleted}</p>
+              <p className="text-2xl font-black text-foreground">{totalCompleted}</p>
               <p className="text-xs text-slate-600 mt-0.5">of {totalChapters} total</p>
             </div>
-            <div className="bg-[#020B18] rounded-xl border border-slate-800 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="flex items-center gap-2 mb-1">
                 <Trophy className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Completed</span>
+                <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Completed</span>
               </div>
-              <p className="text-2xl font-black text-white">{completedCourses}</p>
+              <p className="text-2xl font-black text-foreground">{completedCourses}</p>
               <p className="text-xs text-slate-600 mt-0.5">courses done</p>
             </div>
-            <div className="bg-[#020B18] rounded-xl border border-slate-800 p-4">
+            <div className="bg-background rounded-xl border border-border p-4">
               <div className="flex items-center gap-2 mb-1">
                 <BookOpen className="w-3.5 h-3.5 text-blue-400" />
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">In Progress</span>
+                <span className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">In Progress</span>
               </div>
-              <p className="text-2xl font-black text-white">
+              <p className="text-2xl font-black text-foreground">
                 {startedCourses.filter((s) => !s.isComplete).length}
               </p>
               <p className="text-xs text-slate-600 mt-0.5">courses active</p>
@@ -135,7 +135,7 @@ const DashboardPage = async () => {
         {/* In progress / started */}
         {startedCourses.length > 0 && (
           <section>
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-5">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-5">
               Continue Learning
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -143,10 +143,10 @@ const DashboardPage = async () => {
                 <Link
                   key={course.id}
                   href={`/course/${course.id}/${continueUnitIndex}/${continueChapterIndex}`}
-                  className="group flex flex-col bg-[#041123] border border-slate-800 rounded-xl overflow-hidden hover:border-emerald-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/20 hover:-translate-y-1"
+                  className="group flex flex-col bg-card border border-border rounded-xl overflow-hidden hover:border-emerald-500/40 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-900/20 hover:-translate-y-1"
                 >
                   {/* Thumbnail */}
-                  <div className="relative aspect-video bg-slate-800 overflow-hidden">
+                  <div className="relative aspect-video bg-muted overflow-hidden">
                     {course.image ? (
                       <Image
                         src={course.image}
@@ -161,12 +161,12 @@ const DashboardPage = async () => {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <h3 className="text-sm font-semibold text-white leading-snug line-clamp-2 drop-shadow-md">
+                      <h3 className="text-sm font-semibold text-foreground leading-snug line-clamp-2 drop-shadow-md">
                         {course.name}
                       </h3>
                     </div>
                     {isComplete && (
-                      <div className="absolute top-2 left-2 px-2 py-1 bg-emerald-500/90 backdrop-blur-sm rounded-md text-xs text-white font-semibold">
+                      <div className="absolute top-2 left-2 px-2 py-1 bg-emerald-500/90 backdrop-blur-sm rounded-md text-xs text-foreground font-semibold">
                         ✓ Complete
                       </div>
                     )}
@@ -175,19 +175,19 @@ const DashboardPage = async () => {
                   {/* Progress */}
                   <div className="p-4 flex flex-col flex-1">
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[10px] text-slate-500 uppercase tracking-wider font-medium">Progress</span>
-                      <span className={cn("text-[10px] font-bold", isComplete ? "text-emerald-400" : "text-slate-400")}>
+                      <span className="text-[10px] text-muted-foreground uppercase tracking-wider font-medium">Progress</span>
+                      <span className={cn("text-[10px] font-bold", isComplete ? "text-emerald-400" : "text-muted-foreground")}>
                         {completed}/{total} chapters
                       </span>
                     </div>
-                    <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden mb-4">
+                    <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden mb-4">
                       <div
                         className={cn("h-full rounded-full transition-all duration-500", isComplete ? "bg-emerald-400" : "bg-emerald-600")}
                         style={{ width: `${percent}%` }}
                       />
                     </div>
                     <div className="mt-auto flex items-center justify-between">
-                      <span className="text-xs font-bold text-white">{percent}%</span>
+                      <span className="text-xs font-bold text-foreground">{percent}%</span>
                       <span className="flex items-center gap-1 text-xs font-semibold text-emerald-500 group-hover:text-emerald-400 transition-colors">
                         {isComplete ? "Review" : "Continue"}
                         <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -203,7 +203,7 @@ const DashboardPage = async () => {
         {/* Not started */}
         {notStartedCourses.length > 0 && (
           <section>
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-5">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-5">
               Not Started Yet
             </h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
@@ -211,9 +211,9 @@ const DashboardPage = async () => {
                 <Link
                   key={course.id}
                   href={`/course/${course.id}/0/0`}
-                  className="group flex flex-col bg-[#041123] border border-slate-800 rounded-xl overflow-hidden hover:border-slate-600 transition-all duration-300 hover:-translate-y-1 opacity-70 hover:opacity-100"
+                  className="group flex flex-col bg-card border border-border rounded-xl overflow-hidden hover:border-slate-600 transition-all duration-300 hover:-translate-y-1 opacity-70 hover:opacity-100"
                 >
-                  <div className="relative aspect-video bg-slate-800 overflow-hidden">
+                  <div className="relative aspect-video bg-muted overflow-hidden">
                     {course.image ? (
                       <Image
                         src={course.image}
@@ -228,14 +228,14 @@ const DashboardPage = async () => {
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent" />
                     <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <h3 className="text-sm font-semibold text-white leading-snug line-clamp-2 drop-shadow-md">
+                      <h3 className="text-sm font-semibold text-foreground leading-snug line-clamp-2 drop-shadow-md">
                         {course.name}
                       </h3>
                     </div>
                   </div>
                   <div className="p-4 flex items-center justify-between">
                     <span className="text-xs text-slate-600">{total} chapters</span>
-                    <span className="flex items-center gap-1 text-xs font-semibold text-slate-500 group-hover:text-emerald-400 transition-colors">
+                    <span className="flex items-center gap-1 text-xs font-semibold text-muted-foreground group-hover:text-emerald-400 transition-colors">
                       Start Learning
                       <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </span>
@@ -252,13 +252,13 @@ const DashboardPage = async () => {
             <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6">
               <BookOpen className="w-8 h-8 text-emerald-400" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">No courses yet</h3>
-            <p className="text-slate-500 mb-8 max-w-sm">
+            <h3 className="text-xl font-semibold text-foreground mb-2">No courses yet</h3>
+            <p className="text-muted-foreground mb-8 max-w-sm">
               Create your first course and start tracking your progress here.
             </p>
             <Link
               href="/create"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-lg transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-foreground font-semibold rounded-lg transition-all"
             >
               Create Your First Course
             </Link>

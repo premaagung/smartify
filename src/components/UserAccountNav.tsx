@@ -41,12 +41,12 @@ const UserAccountNav = ({ user }: Props) => {
 
       <DropdownMenuContent
         align="end"
-        className="w-56 bg-[#041123] border border-slate-700 text-slate-200 rounded-xl shadow-xl p-1 mt-1"
+        className="w-56 bg-card border border-slate-700 text-slate-200 rounded-xl shadow-xl p-1 mt-1"
       >
         {/* User info */}
         <div className="px-3 py-2.5 mb-1">
-          <p className="text-sm font-semibold text-white truncate">{user.name}</p>
-          <p className="text-xs text-slate-500 truncate">{user.email}</p>
+          <p className="text-sm font-semibold text-foreground truncate">{user.name}</p>
+          <p className="text-xs text-muted-foreground truncate">{user.email}</p>
           {user.role && (
             <span className={`inline-flex items-center mt-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold border ${
               user.role === "admin"
@@ -60,19 +60,19 @@ const UserAccountNav = ({ user }: Props) => {
           )}
         </div>
 
-        <DropdownMenuSeparator className="bg-slate-800" />
+        <DropdownMenuSeparator className="bg-muted" />
 
         <DropdownMenuItem asChild>
           <Link
             href="/settings"
-            className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-slate-800 hover:text-white transition-colors"
+            className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-muted hover:text-foreground transition-colors"
           >
-            <Settings className="w-4 h-4 text-slate-500" />
+            <Settings className="w-4 h-4 text-muted-foreground" />
             Settings
           </Link>
         </DropdownMenuItem>
 
-        <DropdownMenuSeparator className="bg-slate-800" />
+        <DropdownMenuSeparator className="bg-muted" />
 
         <DropdownMenuItem
           onSelect={handleSignOut}

@@ -59,20 +59,20 @@ const SettingsPage = async () => {
       : 0;
 
   return (
-    <div className="min-h-screen bg-[#020B18]">
+    <div className="min-h-screen bg-background">
       <div className="max-w-4xl mx-auto px-6 lg:px-8 py-12">
 
         {/* Header */}
         <div className="mb-10">
-          <h1 className="text-3xl font-bold text-white mb-1">Settings</h1>
-          <p className="text-slate-500">Your account and learning overview</p>
+          <h1 className="text-3xl font-bold text-foreground mb-1">Settings</h1>
+          <p className="text-muted-foreground">Your account and learning overview</p>
         </div>
 
         <div className="space-y-6">
 
           {/* Profile card */}
-          <div className="bg-[#041123] border border-slate-800 rounded-xl p-6">
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2">
+          <div className="bg-card border border-border rounded-xl p-6">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-5 flex items-center gap-2">
               <User className="w-4 h-4 text-emerald-400" />
               Account
             </h2>
@@ -89,8 +89,8 @@ const SettingsPage = async () => {
                 </div>
               )}
               <div>
-                <p className="text-lg font-semibold text-white">{session.user.name}</p>
-                <p className="text-sm text-slate-500">{session.user.email}</p>
+                <p className="text-lg font-semibold text-foreground">{session.user.name}</p>
+                <p className="text-sm text-muted-foreground">{session.user.email}</p>
               </div>
               <div className="ml-auto">
                 <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold border bg-emerald-500/10 border-emerald-500/30 text-emerald-400">
@@ -109,26 +109,26 @@ const SettingsPage = async () => {
               { label: "Avg Quiz Score", value: `${avgScore}%`, icon: BarChart3, color: avgScore >= 80 ? "text-emerald-400" : avgScore >= 60 ? "text-amber-400" : "text-red-400" },
               { label: "Perfect Scores", value: perfectScores, icon: Trophy, color: "text-amber-400" },
             ].map(({ label, value, icon: Icon, color }) => (
-              <div key={label} className="bg-[#041123] border border-slate-800 rounded-xl p-5 flex flex-col items-center text-center">
+              <div key={label} className="bg-card border border-border rounded-xl p-5 flex flex-col items-center text-center">
                 <Icon className={`w-5 h-5 mb-2 ${color}`} />
                 <p className={`text-2xl font-bold ${color}`}>{value}</p>
-                <p className="text-xs text-slate-500 mt-0.5">{label}</p>
+                <p className="text-xs text-muted-foreground mt-0.5">{label}</p>
               </div>
             ))}
           </div>
 
           {/* Overall progress */}
-          <div className="bg-[#041123] border border-slate-800 rounded-xl p-6">
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2">
+          <div className="bg-card border border-border rounded-xl p-6">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-5 flex items-center gap-2">
               <BarChart3 className="w-4 h-4 text-emerald-400" />
               Learning Progress
             </h2>
 
             <div className="flex items-center justify-between mb-2">
-              <p className="text-sm text-slate-400">Overall completion</p>
-              <p className="text-sm font-bold text-white">{completedChapters}/{totalChapters} chapters</p>
+              <p className="text-sm text-muted-foreground">Overall completion</p>
+              <p className="text-sm font-bold text-foreground">{completedChapters}/{totalChapters} chapters</p>
             </div>
-            <div className="h-2 bg-slate-800 rounded-full overflow-hidden mb-6">
+            <div className="h-2 bg-muted rounded-full overflow-hidden mb-6">
               <div
                 className="h-full rounded-full bg-emerald-500 transition-all duration-500"
                 style={{ width: `${overallPercent}%` }}
@@ -138,7 +138,7 @@ const SettingsPage = async () => {
             {/* Per-course breakdown */}
             {activeCourses.length > 0 ? (
               <div>
-                <p className="text-xs text-slate-500 uppercase tracking-wider mb-3">Courses in Progress</p>
+                <p className="text-xs text-muted-foreground uppercase tracking-wider mb-3">Courses in Progress</p>
                 <div className="space-y-3">
                   {activeCourses.map((course) => {
                     const pct = course.total > 0
@@ -148,14 +148,14 @@ const SettingsPage = async () => {
                       <div key={course.name}>
                         <div className="flex items-center justify-between mb-1">
                           <div className="flex items-center gap-2">
-                            <BookOpen className="w-3.5 h-3.5 text-slate-500 shrink-0" />
+                            <BookOpen className="w-3.5 h-3.5 text-muted-foreground shrink-0" />
                             <p className="text-sm text-slate-300 truncate max-w-xs">{course.name}</p>
                           </div>
-                          <span className={`text-xs font-semibold ${pct === 100 ? "text-emerald-400" : "text-slate-400"}`}>
+                          <span className={`text-xs font-semibold ${pct === 100 ? "text-emerald-400" : "text-muted-foreground"}`}>
                             {pct === 100 ? "✓ Complete" : `${course.completed}/${course.total}`}
                           </span>
                         </div>
-                        <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                        <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                           <div
                             className={`h-full rounded-full transition-all duration-500 ${pct === 100 ? "bg-emerald-400" : "bg-emerald-600"}`}
                             style={{ width: `${pct}%` }}
@@ -174,15 +174,15 @@ const SettingsPage = async () => {
           </div>
 
           {/* Security card */}
-          <div className="bg-[#041123] border border-slate-800 rounded-xl p-6">
-            <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-widest mb-5 flex items-center gap-2">
+          <div className="bg-card border border-border rounded-xl p-6">
+            <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-widest mb-5 flex items-center gap-2">
               <Shield className="w-4 h-4 text-emerald-400" />
               Security
             </h2>
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-sm font-medium text-white mb-0.5">Authentication</p>
-                <p className="text-xs text-slate-500">
+                <p className="text-sm font-medium text-foreground mb-0.5">Authentication</p>
+                <p className="text-xs text-muted-foreground">
                   Signed in with Google · {session.user.email}
                 </p>
               </div>

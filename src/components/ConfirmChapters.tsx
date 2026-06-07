@@ -31,7 +31,7 @@ type AlignmentStatus = "unchecked" | "aligned" | "partial" | "not-aligned";
 const alignmentConfig: Record<AlignmentStatus, {
   color: string; border: string; bg: string;
 }> = {
-  unchecked:     { color: "text-slate-500",   border: "border-slate-700",      bg: "bg-slate-800/40" },
+  unchecked:     { color: "text-muted-foreground",   border: "border-slate-700",      bg: "bg-muted/40" },
   aligned:       { color: "text-emerald-400", border: "border-emerald-500/40", bg: "bg-emerald-500/10" },
   partial:       { color: "text-amber-400",   border: "border-amber-500/40",   bg: "bg-amber-500/10" },
   "not-aligned": { color: "text-red-400",     border: "border-red-500/40",     bg: "bg-red-500/10" },
@@ -134,8 +134,8 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
           <BookOpen className="w-5 h-5 text-emerald-400" />
         </div>
         <div>
-          <h2 className="text-xl font-bold text-white">Course Setup</h2>
-          <p className="text-sm text-slate-500">
+          <h2 className="text-xl font-bold text-foreground">Course Setup</h2>
+          <p className="text-sm text-muted-foreground">
             Generate content first, then review curriculum alignment.
           </p>
         </div>
@@ -152,10 +152,10 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
               <div className={cn(
                 "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border transition-colors",
                 s.done
-                  ? "bg-emerald-500 border-emerald-500 text-white"
+                  ? "bg-emerald-500 border-emerald-500 text-foreground"
                   : (i === 0 && step === "generate") || (i === 1 && step === "review")
                   ? "border-emerald-500 text-emerald-400 bg-emerald-500/10"
-                  : "border-slate-700 text-slate-600 bg-slate-800"
+                  : "border-slate-700 text-slate-600 bg-muted"
               )}>
                 {s.done ? <CheckCircle2 className="w-3.5 h-3.5" /> : s.num}
               </div>
@@ -163,14 +163,14 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
                 "text-xs font-medium",
                 s.done ? "text-emerald-400" :
                 (i === 0 && step === "generate") || (i === 1 && step === "review")
-                  ? "text-white" : "text-slate-600"
+                  ? "text-foreground" : "text-slate-600"
               )}>
                 {s.label}
               </span>
             </div>
             {i === 0 && (
               <div className={cn("flex-1 h-px transition-colors",
-                generationComplete ? "bg-emerald-500/50" : "bg-slate-800"
+                generationComplete ? "bg-emerald-500/50" : "bg-muted"
               )} />
             )}
           </React.Fragment>
@@ -193,12 +193,12 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
           {loading && (
             <div className="mb-6">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-xs text-slate-500">Generating content...</span>
+                <span className="text-xs text-muted-foreground">Generating content...</span>
                 <span className="text-xs text-emerald-400 font-medium">
                   {completedChapters.size}/{totalChaptersCount} chapters
                 </span>
               </div>
-              <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
+              <div className="h-1.5 bg-muted rounded-full overflow-hidden">
                 <div
                   className="h-full bg-emerald-500 rounded-full transition-all duration-500"
                   style={{ width: `${progressPercent}%` }}
@@ -210,14 +210,14 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
           {/* Chapter cards */}
           <div className="space-y-6 mb-8">
             {course.units.map((unit, unitIndex) => (
-              <div key={unit.id} className="bg-[#041123] border border-slate-800 rounded-xl overflow-hidden">
-                <div className="px-5 py-4 border-b border-slate-800 flex items-center gap-3">
-                  <span className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-400 shrink-0">
+              <div key={unit.id} className="bg-card border border-border rounded-xl overflow-hidden">
+                <div className="px-5 py-4 border-b border-border flex items-center gap-3">
+                  <span className="w-6 h-6 rounded-full bg-muted border border-slate-700 flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
                     {unitIndex + 1}
                   </span>
                   <div>
-                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Unit {unitIndex + 1}</p>
-                    <h3 className="text-base font-semibold text-white leading-snug">{unit.name}</h3>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">Unit {unitIndex + 1}</p>
+                    <h3 className="text-base font-semibold text-foreground leading-snug">{unit.name}</h3>
                   </div>
                 </div>
                 <div className="p-3 space-y-1.5">
@@ -237,10 +237,10 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-6 border-t border-slate-800">
+          <div className="flex items-center justify-between pt-6 border-t border-border">
             <Link
               href="/create"
-              className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 text-slate-400 hover:text-white hover:border-slate-600 text-sm font-medium transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 text-muted-foreground hover:text-foreground hover:border-slate-600 text-sm font-medium transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
               Back
@@ -249,7 +249,7 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
             {generationComplete ? (
               <button
                 onClick={() => setStep("review")}
-                className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold text-sm rounded-lg transition-all shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
+                className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-foreground font-semibold text-sm rounded-lg transition-all shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
               >
                 <ClipboardList className="w-4 h-4" />
                 Review Alignment
@@ -262,8 +262,8 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
                 className={cn(
                   "flex items-center gap-2 px-5 py-2.5 font-semibold text-sm rounded-lg transition-all duration-150",
                   loading
-                    ? "bg-emerald-600/40 text-white/50 cursor-not-allowed"
-                    : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
+                    ? "bg-emerald-600/40 text-foreground/50 cursor-not-allowed"
+                    : "bg-emerald-500 hover:bg-emerald-400 text-foreground shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
                 )}
               >
                 <Sparkles className={cn("w-4 h-4", loading && "animate-pulse")} />
@@ -298,7 +298,7 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
               ].map((s) => (
                 <div key={s.key} className={cn("rounded-lg border p-3 text-center", s.bg)}>
                   <p className={cn("text-2xl font-bold", s.color)}>{alignmentStats[s.key as AlignmentStatus]}</p>
-                  <p className="text-xs text-slate-500 mt-0.5">{s.label}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{s.label}</p>
                 </div>
               ))}
             </div>
@@ -320,14 +320,14 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
           {/* Units + chapters with expand preview */}
           <div className="space-y-6 mb-8">
             {course.units.map((unit, unitIndex) => (
-              <div key={unit.id} className="bg-[#041123] border border-slate-800 rounded-xl overflow-hidden">
-                <div className="px-5 py-4 border-b border-slate-800 flex items-center gap-3">
-                  <span className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-400 shrink-0">
+              <div key={unit.id} className="bg-card border border-border rounded-xl overflow-hidden">
+                <div className="px-5 py-4 border-b border-border flex items-center gap-3">
+                  <span className="w-6 h-6 rounded-full bg-muted border border-slate-700 flex items-center justify-center text-xs font-bold text-muted-foreground shrink-0">
                     {unitIndex + 1}
                   </span>
                   <div>
-                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Unit {unitIndex + 1}</p>
-                    <h3 className="text-base font-semibold text-white leading-snug">{unit.name}</h3>
+                    <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest">Unit {unitIndex + 1}</p>
+                    <h3 className="text-base font-semibold text-foreground leading-snug">{unit.name}</h3>
                   </div>
                 </div>
 
@@ -347,7 +347,7 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
                         {/* Chapter row */}
                         <div className="flex items-center justify-between px-4 py-3">
                           <div className="min-w-0 flex-1 mr-3">
-                            <p className="text-xs text-slate-500 mb-0.5">Ch. {chapterIndex + 1}</p>
+                            <p className="text-xs text-muted-foreground mb-0.5">Ch. {chapterIndex + 1}</p>
                             <p className={cn("text-sm font-medium leading-snug", config.color)}>
                               {chapter.name}
                             </p>
@@ -368,10 +368,10 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
                                   className={cn(
                                     "px-2.5 py-1 rounded-md text-xs font-semibold border transition-all duration-150",
                                     status === s
-                                      ? s === "aligned" ? "bg-emerald-500 border-emerald-500 text-white"
-                                        : s === "partial" ? "bg-amber-500 border-amber-500 text-white"
-                                        : "bg-red-500 border-red-500 text-white"
-                                      : "bg-transparent border-slate-700 text-slate-500 hover:border-slate-500 hover:text-slate-300"
+                                      ? s === "aligned" ? "bg-emerald-500 border-emerald-500 text-foreground"
+                                        : s === "partial" ? "bg-amber-500 border-amber-500 text-foreground"
+                                        : "bg-red-500 border-red-500 text-foreground"
+                                      : "bg-transparent border-slate-700 text-muted-foreground hover:border-slate-500 hover:text-slate-300"
                                   )}
                                 >
                                   {s === "aligned" ? "✓" : s === "partial" ? "~" : "✕"}
@@ -393,7 +393,7 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
                             {/* Expand toggle */}
                             <button
                               onClick={() => setExpandedChapterId(isExpanded ? null : chapter.id)}
-                              className="w-7 h-7 rounded-md border border-slate-700 flex items-center justify-center text-slate-500 hover:text-white hover:border-slate-500 transition-all"
+                              className="w-7 h-7 rounded-md border border-slate-700 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-slate-500 transition-all"
                             >
                               <ChevronDown className={cn("w-3.5 h-3.5 transition-transform duration-200", isExpanded && "rotate-180")} />
                             </button>
@@ -402,11 +402,11 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
 
                         {/* Expandable preview */}
                         {isExpanded && (
-                          <div className="px-4 pb-4 pt-1 border-t border-slate-800/60 space-y-3">
+                          <div className="px-4 pb-4 pt-1 border-t border-border/60 space-y-3">
 
                             {/* Video */}
-                            <div className="p-3 rounded-lg bg-[#020B18] border border-slate-800">
-                              <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                            <div className="p-3 rounded-lg bg-background border border-border">
+                              <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider mb-2 flex items-center gap-1.5">
                                 <Play className="w-3 h-3 text-red-400" />
                                 Video
                               </p>
@@ -426,13 +426,13 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
                               )}
                             </div>
                                                         {/* Summary */}
-                            <div className="p-3 rounded-lg bg-[#020B18] border border-slate-800">
+                            <div className="p-3 rounded-lg bg-background border border-border">
                               <div className="flex items-center gap-2 mb-2">
                                 <FileText className="w-3.5 h-3.5 text-emerald-400" />
-                                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Summary</p>
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Summary</p>
                               </div>
                               {live.summary ? (
-                                <p className="text-xs text-slate-400 leading-relaxed line-clamp-4">
+                                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-4">
                                   {live.summary}
                                 </p>
                               ) : (
@@ -441,15 +441,15 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
                             </div>
 
                             {/* Quiz */}
-                            <div className="p-3 rounded-lg bg-[#020B18] border border-slate-800">
+                            <div className="p-3 rounded-lg bg-background border border-border">
                               <div className="flex items-center gap-2 mb-2">
                                 <HelpCircle className="w-3.5 h-3.5 text-amber-400" />
-                                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">Quiz</p>
+                                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-wider">Quiz</p>
                               </div>
                               {live.questions && live.questions.length > 0 ? (
                                 <div className="space-y-1.5">
                                   {live.questions.slice(0, 3).map((q, qi) => (
-                                    <p key={q.id} className="text-xs text-slate-400">
+                                    <p key={q.id} className="text-xs text-muted-foreground">
                                       <span className="text-slate-600">Q{qi + 1}.</span> {q.question}
                                     </p>
                                   ))}
@@ -472,10 +472,10 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between pt-6 border-t border-slate-800">
+          <div className="flex items-center justify-between pt-6 border-t border-border">
             <button
               onClick={() => setStep("generate")}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 text-slate-400 hover:text-white hover:border-slate-600 text-sm font-medium transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 text-muted-foreground hover:text-foreground hover:border-slate-600 text-sm font-medium transition-all"
             >
               <ChevronLeft className="w-4 h-4" />
               Back
@@ -487,8 +487,8 @@ const ConfirmChapters = ({ course, initialStep = "generate" }: Props) => {
               className={cn(
                 "flex items-center gap-2 px-5 py-2.5 font-semibold text-sm rounded-lg transition-all duration-150",
                 allChecked && isAllManualDone
-                  ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
-                  : "bg-slate-800 text-slate-600 cursor-not-allowed"
+                  ? "bg-emerald-500 hover:bg-emerald-400 text-foreground shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
+                  : "bg-muted text-slate-600 cursor-not-allowed"
               )}
             >
               <ClipboardList className="w-4 h-4" />

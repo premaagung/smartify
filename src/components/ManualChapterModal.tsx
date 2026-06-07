@@ -164,44 +164,44 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-2xl bg-[#041123] border border-slate-800 rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
+      <div className="w-full max-w-2xl bg-card border border-border rounded-2xl shadow-2xl flex flex-col max-h-[90vh]">
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-border shrink-0">
           <div className="min-w-0">
-            <p className="text-xs text-slate-500 font-medium uppercase tracking-widest mb-0.5">
+            <p className="text-xs text-muted-foreground font-medium uppercase tracking-widest mb-0.5">
               Manual Chapter Builder
             </p>
-            <h2 className="text-base font-semibold text-white leading-snug truncate">
+            <h2 className="text-base font-semibold text-foreground leading-snug truncate">
               {chapter.name}
             </h2>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-lg border border-slate-700 flex items-center justify-center text-slate-400 hover:text-white hover:border-slate-600 transition-all shrink-0 ml-4"
+            className="w-8 h-8 rounded-lg border border-slate-700 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-slate-600 transition-all shrink-0 ml-4"
           >
             <X className="w-4 h-4" />
           </button>
         </div>
 
         {/* Step indicator */}
-        <div className="flex items-center px-6 py-4 border-b border-slate-800 shrink-0 gap-2">
+        <div className="flex items-center px-6 py-4 border-b border-border shrink-0 gap-2">
           {STEPS.map((s, i) => (
             <React.Fragment key={s}>
               <div className="flex items-center gap-1.5">
                 <div className={cn(
                   "w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border transition-colors",
                   i < step
-                    ? "bg-emerald-500 border-emerald-500 text-white"
+                    ? "bg-emerald-500 border-emerald-500 text-foreground"
                     : i === step
                     ? "border-emerald-500 text-emerald-400 bg-emerald-500/10"
-                    : "border-slate-700 text-slate-600 bg-slate-800/50"
+                    : "border-slate-700 text-slate-600 bg-muted/50"
                 )}>
                   {i < step ? <CheckCircle2 className="w-3.5 h-3.5" /> : i + 1}
                 </div>
                 <span className={cn(
                   "text-xs font-medium hidden sm:block",
-                  i === step ? "text-white" : i < step ? "text-emerald-400" : "text-slate-600"
+                  i === step ? "text-foreground" : i < step ? "text-emerald-400" : "text-slate-600"
                 )}>
                   {s}
                 </span>
@@ -209,7 +209,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
               {i < STEPS.length - 1 && (
                 <div className={cn(
                   "flex-1 h-px transition-colors",
-                  i < step ? "bg-emerald-500/50" : "bg-slate-800"
+                  i < step ? "bg-emerald-500/50" : "bg-muted"
                 )} />
               )}
             </React.Fragment>
@@ -223,7 +223,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
           {step === 0 && (
             <div className="space-y-4">
               <div>
-                <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest block mb-2">
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-2">
                   Search YouTube
                 </label>
                 <div className="flex gap-2">
@@ -232,12 +232,12 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
                     onChange={(e) => setSearchQuery(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleSearch()}
                     placeholder="Search for a video..."
-                    className="flex-1 bg-[#020B18] border border-slate-700 text-white placeholder:text-slate-600 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors"
+                    className="flex-1 bg-background border border-slate-700 text-foreground placeholder:text-slate-600 rounded-lg px-3 py-2.5 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors"
                   />
                   <button
                     onClick={handleSearch}
                     disabled={searching}
-                    className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white text-sm font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                    className="flex items-center gap-2 px-4 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-foreground text-sm font-semibold rounded-lg transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                   >
                     {searching ? <Loader2 className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
                     Search
@@ -259,8 +259,8 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
                   <div className="flex gap-3">
                     <img src={selectedVideo.thumbnail} alt="" className="w-24 h-14 rounded-lg object-cover shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-sm font-medium text-white leading-snug line-clamp-2">{selectedVideo.title}</p>
-                      <p className="text-xs text-slate-500 mt-1">{selectedVideo.channelTitle}</p>
+                      <p className="text-sm font-medium text-foreground leading-snug line-clamp-2">{selectedVideo.title}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{selectedVideo.channelTitle}</p>
                     </div>
                   </div>
                 </div>
@@ -269,7 +269,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
               {/* Search results */}
               {searchResults.length > 0 && (
                 <div>
-                  <p className="text-xs text-slate-500 font-medium mb-3">
+                  <p className="text-xs text-muted-foreground font-medium mb-3">
                     {searchResults.length} results — click to select
                   </p>
                   <div className="space-y-2">
@@ -281,22 +281,22 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
                           "w-full flex gap-3 p-3 rounded-lg border text-left transition-all duration-150",
                           selectedVideo?.videoId === video.videoId
                             ? "border-emerald-500/40 bg-emerald-500/10"
-                            : "border-slate-800 bg-slate-900/30 hover:border-slate-700 hover:bg-slate-800/40"
+                            : "border-border bg-muted/30 hover:border-slate-700 hover:bg-muted/40"
                         )}
                       >
                         <div className="relative shrink-0">
                           <img src={video.thumbnail} alt="" className="w-24 h-14 rounded-md object-cover" />
                           <div className="absolute inset-0 flex items-center justify-center">
                             <div className="w-7 h-7 rounded-full bg-black/60 flex items-center justify-center">
-                              <Play className="w-3 h-3 text-white ml-0.5" />
+                              <Play className="w-3 h-3 text-foreground ml-0.5" />
                             </div>
                           </div>
                         </div>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium text-white leading-snug line-clamp-2 mb-1">
+                          <p className="text-sm font-medium text-foreground leading-snug line-clamp-2 mb-1">
                             {video.title}
                           </p>
-                          <p className="text-xs text-slate-500">{video.channelTitle}</p>
+                          <p className="text-xs text-muted-foreground">{video.channelTitle}</p>
                         </div>
                         {selectedVideo?.videoId === video.videoId && (
                           <CheckCircle2 className="w-4 h-4 text-emerald-400 shrink-0 mt-1" />
@@ -321,7 +321,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest block mb-0.5">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-0.5">
                     Chapter Summary
                   </label>
                   <p className="text-xs text-slate-600">Write a summary or let AI generate one from the chapter topic.</p>
@@ -350,7 +350,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
                 onChange={(e) => setSummary(e.target.value)}
                 placeholder="Write a concise educational summary of this chapter..."
                 rows={10}
-                className="w-full bg-[#020B18] border border-slate-700 text-white placeholder:text-slate-600 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors resize-none leading-relaxed"
+                className="w-full bg-background border border-slate-700 text-foreground placeholder:text-slate-600 rounded-lg px-4 py-3 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors resize-none leading-relaxed"
               />
               <p className="text-xs text-slate-600 text-right">{summary.length} characters</p>
             </div>
@@ -361,7 +361,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
             <div className="space-y-4">
               <div className="flex items-center justify-between">
                 <div>
-                  <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest block mb-0.5">
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-0.5">
                     Quiz Questions
                   </label>
                   <p className="text-xs text-slate-600">Add questions manually or let AI generate them. Quiz is optional.</p>
@@ -387,9 +387,9 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
 
               <div className="space-y-4">
                 {questions.map((q, qi) => (
-                  <div key={q.id} className="bg-[#020B18] border border-slate-800 rounded-xl p-4">
+                  <div key={q.id} className="bg-background border border-border rounded-xl p-4">
                     <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest">
+                      <span className="text-xs font-semibold text-muted-foreground uppercase tracking-widest">
                         Question {qi + 1}
                       </span>
                       <button
@@ -404,7 +404,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
                       value={q.question}
                       onChange={(e) => updateQuestion(q.id, "question", e.target.value)}
                       placeholder="Question text..."
-                      className="w-full bg-slate-900 border border-slate-700 text-white placeholder:text-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500/60 mb-3 transition-colors"
+                      className="w-full bg-muted border border-slate-700 text-foreground placeholder:text-slate-600 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-emerald-500/60 mb-3 transition-colors"
                     />
 
                     <div className="space-y-2">
@@ -414,7 +414,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
                             "w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0",
                             field === "answer"
                               ? "bg-emerald-500/20 border border-emerald-500/40 text-emerald-400"
-                              : "bg-slate-800 border border-slate-700 text-slate-500"
+                              : "bg-muted border border-slate-700 text-muted-foreground"
                           )}>
                             {field === "answer" ? "✓" : fi}
                           </span>
@@ -422,7 +422,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
                             value={q[field]}
                             onChange={(e) => updateQuestion(q.id, field, e.target.value)}
                             placeholder={field === "answer" ? "Correct answer..." : `Wrong option ${fi}...`}
-                            className="flex-1 bg-slate-900 border border-slate-700 text-white placeholder:text-slate-600 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-emerald-500/60 transition-colors"
+                            className="flex-1 bg-muted border border-slate-700 text-foreground placeholder:text-slate-600 rounded-lg px-3 py-1.5 text-xs focus:outline-none focus:border-emerald-500/60 transition-colors"
                           />
                         </div>
                       ))}
@@ -433,7 +433,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
 
               <button
                 onClick={addQuestion}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed border-slate-700 text-slate-500 hover:text-white hover:border-emerald-500/40 hover:bg-emerald-500/5 text-sm font-medium transition-all"
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-lg border border-dashed border-slate-700 text-muted-foreground hover:text-foreground hover:border-emerald-500/40 hover:bg-emerald-500/5 text-sm font-medium transition-all"
               >
                 <Plus className="w-4 h-4" />
                 Add Question
@@ -452,37 +452,37 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
           {/* ── Step 4: Confirm ── */}
           {step === 3 && (
             <div className="space-y-5">
-              <p className="text-sm text-slate-400">Review everything before saving to the course.</p>
+              <p className="text-sm text-muted-foreground">Review everything before saving to the course.</p>
 
               {/* Video */}
-              <div className="bg-[#020B18] border border-slate-800 rounded-xl p-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+              <div className="bg-background border border-border rounded-xl p-4">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 flex items-center gap-1.5">
                   <Youtube className="w-3.5 h-3.5 text-red-400" /> Video
                 </p>
                 {selectedVideo && (
                   <div className="flex gap-3">
                     <img src={selectedVideo.thumbnail} alt="" className="w-24 h-14 rounded-lg object-cover shrink-0" />
                     <div>
-                      <p className="text-sm font-medium text-white leading-snug">{selectedVideo.title}</p>
-                      <p className="text-xs text-slate-500 mt-1">{selectedVideo.channelTitle}</p>
+                      <p className="text-sm font-medium text-foreground leading-snug">{selectedVideo.title}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{selectedVideo.channelTitle}</p>
                     </div>
                   </div>
                 )}
               </div>
 
               {/* Summary */}
-              <div className="bg-[#020B18] border border-slate-800 rounded-xl p-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+              <div className="bg-background border border-border rounded-xl p-4">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 flex items-center gap-1.5">
                   <FileText className="w-3.5 h-3.5 text-emerald-400" /> Summary
                 </p>
-                <p className="text-sm text-slate-400 leading-relaxed line-clamp-4">
+                <p className="text-sm text-muted-foreground leading-relaxed line-clamp-4">
                   {summary || <span className="text-slate-600 italic">No summary written.</span>}
                 </p>
               </div>
 
               {/* Quiz */}
-              <div className="bg-[#020B18] border border-slate-800 rounded-xl p-4">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3 flex items-center gap-1.5">
+              <div className="bg-background border border-border rounded-xl p-4">
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-widest mb-3 flex items-center gap-1.5">
                   <HelpCircle className="w-3.5 h-3.5 text-amber-400" /> Quiz
                 </p>
                 {questions.length === 0 ? (
@@ -492,7 +492,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
                     {questions.map((q, i) => (
                       <div key={q.id} className="flex items-start gap-2">
                         <span className="text-xs text-slate-600 shrink-0 mt-0.5">Q{i + 1}.</span>
-                        <p className="text-sm text-slate-400 line-clamp-1">{q.question || <span className="italic text-slate-600">Empty question</span>}</p>
+                        <p className="text-sm text-muted-foreground line-clamp-1">{q.question || <span className="italic text-slate-600">Empty question</span>}</p>
                       </div>
                     ))}
                   </div>
@@ -509,10 +509,10 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
         </div>
 
         {/* Footer navigation */}
-        <div className="flex items-center justify-between px-6 py-4 border-t border-slate-800 shrink-0">
+        <div className="flex items-center justify-between px-6 py-4 border-t border-border shrink-0">
           <button
             onClick={() => step === 0 ? onClose() : setStep(step - 1)}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 text-slate-400 hover:text-white hover:border-slate-600 text-sm font-medium transition-all"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-lg border border-slate-700 text-muted-foreground hover:text-foreground hover:border-slate-600 text-sm font-medium transition-all"
           >
             <ChevronLeft className="w-4 h-4" />
             {step === 0 ? "Cancel" : "Back"}
@@ -525,8 +525,8 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
               className={cn(
                 "flex items-center gap-2 px-5 py-2.5 font-semibold text-sm rounded-lg transition-all",
                 canProceed
-                  ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
-                  : "bg-slate-800 text-slate-600 cursor-not-allowed"
+                  ? "bg-emerald-500 hover:bg-emerald-400 text-foreground shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
+                  : "bg-muted text-slate-600 cursor-not-allowed"
               )}
             >
               Next: {STEPS[step + 1]}
@@ -536,7 +536,7 @@ const ManualChapterModal = ({ chapter, onClose, onSaved }: Props) => {
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold text-sm rounded-lg transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-foreground font-semibold text-sm rounded-lg transition-all shadow-lg shadow-emerald-500/20 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <CheckCircle2 className="w-4 h-4" />}
               {saving ? "Saving..." : "Save Chapter"}

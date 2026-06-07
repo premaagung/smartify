@@ -91,27 +91,27 @@ const QuizCards = ({ chapter, onComplete }: Props) => {
     <div className="mt-8">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="text-xl font-bold text-white">Concept Check</h2>
-          <p className="text-sm text-slate-500 mt-0.5">
+          <h2 className="text-xl font-bold text-foreground">Concept Check</h2>
+          <p className="text-sm text-muted-foreground mt-0.5">
             {chapter.questions.length} questions · Test your understanding
           </p>
         </div>
         {isSubmitted && (
-          <button onClick={reset} className="flex items-center gap-1.5 text-sm text-slate-400 hover:text-white transition-colors">
+          <button onClick={reset} className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors">
             <RotateCcw className="w-3.5 h-3.5" /> Retry
           </button>
         )}
       </div>
 
       {!isSubmitted && !isLoadingPrevious && previousResult && prevScorePercent !== null && (
-        <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-700 bg-slate-800/40 mb-5">
+        <div className="flex items-center justify-between p-3.5 rounded-xl border border-slate-700 bg-muted/40 mb-5">
           <div className="flex items-center gap-2.5">
             <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
             <div>
               <p className="text-sm font-medium text-slate-300">
                 Previous attempt: {previousResult.score}/{previousResult.total} correct
               </p>
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-muted-foreground mt-0.5">
                 {new Date(previousResult.updatedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
               </p>
             </div>
@@ -149,14 +149,14 @@ const QuizCards = ({ chapter, onComplete }: Props) => {
           const selected = answers[question.id];
 
           return (
-            <div key={question.id} className={cn("bg-[#041123] rounded-xl border p-5 transition-colors duration-200",
-              isAnswered ? isCorrect ? "border-emerald-500/40" : "border-red-500/30" : "border-slate-800")}>
+            <div key={question.id} className={cn("bg-card rounded-xl border p-5 transition-colors duration-200",
+              isAnswered ? isCorrect ? "border-emerald-500/40" : "border-red-500/30" : "border-border")}>
               <div className="flex items-start gap-3 mb-4">
-                <span className="shrink-0 w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-xs font-bold text-slate-400 mt-0.5">
+                <span className="shrink-0 w-6 h-6 rounded-full bg-muted border border-slate-700 flex items-center justify-center text-xs font-bold text-muted-foreground mt-0.5">
                   {qi + 1}
                 </span>
                 <div className="flex items-start justify-between gap-3 flex-1 min-w-0">
-                  <p className="text-sm font-medium text-white leading-relaxed">{question.question}</p>
+                  <p className="text-sm font-medium text-foreground leading-relaxed">{question.question}</p>
                   {isAnswered && (isCorrect
                     ? <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
                     : <XCircle className="w-5 h-5 text-red-400 shrink-0" />)}
@@ -166,7 +166,7 @@ const QuizCards = ({ chapter, onComplete }: Props) => {
                 {options.map((option, index) => {
                   const isSelected = selected === option;
                   const isAnswer = option === question.answer;
-                  let style = "border-slate-700 text-slate-400 hover:border-emerald-500/40 hover:text-slate-200 hover:bg-slate-800/50 cursor-pointer";
+                  let style = "border-slate-700 text-muted-foreground hover:border-emerald-500/40 hover:text-slate-200 hover:bg-muted/50 cursor-pointer";
                   let indicator = <div className="w-4 h-4 rounded-full border-2 border-slate-600 shrink-0" />;
 
                   if (isAnswered) {
@@ -177,7 +177,7 @@ const QuizCards = ({ chapter, onComplete }: Props) => {
                       style = "border-red-500/40 bg-red-500/10 text-red-300 cursor-default";
                       indicator = <XCircle className="w-4 h-4 text-red-400 shrink-0" />;
                     } else {
-                      style = "border-slate-800 text-slate-600 cursor-default";
+                      style = "border-border text-slate-600 cursor-default";
                     }
                   } else if (isSelected) {
                     style = "border-emerald-500/50 bg-emerald-500/10 text-emerald-300 cursor-pointer";
@@ -209,8 +209,8 @@ const QuizCards = ({ chapter, onComplete }: Props) => {
         <button onClick={checkAnswer} disabled={totalAnswered < chapter.questions.length}
           className={cn("mt-6 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl font-semibold transition-all duration-150",
             totalAnswered >= chapter.questions.length
-              ? "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
-              : "bg-slate-800 text-slate-600 cursor-not-allowed")}>
+              ? "bg-emerald-500 hover:bg-emerald-400 text-foreground shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5"
+              : "bg-muted text-slate-600 cursor-not-allowed")}>
           Check Answers <ChevronRight className="w-4 h-4" />
         </button>
       )}

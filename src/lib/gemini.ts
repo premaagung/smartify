@@ -3,9 +3,9 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
-const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash";
+const MODEL = process.env.GEMINI_MODEL || "gemini-2.5-flash-lite";
 
-function cleanJSON(text: string): string {
+export function cleanJSON(text: string): string {
   return text
     .replace(/```json\s*/gi, "")
     .replace(/```\s*/g, "")
@@ -60,7 +60,7 @@ No explanation, no markdown, no code fences. Just the raw JSON object.`,
         results.push(parsed);
       } catch {
         console.error("JSON parse error. Raw response:", raw);
-        results.push({});
+        results.push(null);
       }
     } catch (error: any) {
       if (error?.status === 429) {

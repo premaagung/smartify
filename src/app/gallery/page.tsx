@@ -43,26 +43,26 @@ const GalleryPage = async () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#020B18]">
+    <div className="min-h-screen bg-background">
 
       {/* Page header */}
-      <div className="border-b border-slate-800 bg-[#041123]">
+      <div className="border-b border-border bg-card">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-10">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
               <p className="text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-2">
                 Learning Library
               </p>
-              <h1 className="text-3xl lg:text-4xl font-bold text-white mb-2">
+              <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-2">
                 Course Gallery
               </h1>
-              <p className="text-slate-500 text-sm">
+              <p className="text-muted-foreground text-sm">
                 {courses.length} course{courses.length !== 1 ? "s" : ""} · {totalChapters} chapters available
               </p>
             </div>
             <Link
               href="/create"
-              className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold text-sm rounded-lg transition-all duration-150 shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5 self-start sm:self-auto shrink-0"
+              className="inline-flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-400 text-foreground font-semibold text-sm rounded-lg transition-all duration-150 shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5 self-start sm:self-auto shrink-0"
             >
               <PlusCircle className="w-4 h-4" />
               Create Course
@@ -78,13 +78,13 @@ const GalleryPage = async () => {
             <div className="w-16 h-16 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6">
               <BookOpen className="w-8 h-8 text-emerald-400" />
             </div>
-            <h3 className="text-xl font-semibold text-white mb-2">No courses yet</h3>
-            <p className="text-slate-500 mb-8 max-w-sm">
+            <h3 className="text-xl font-semibold text-foreground mb-2">No courses yet</h3>
+            <p className="text-muted-foreground mb-8 max-w-sm">
               Be the first to create a course. Our AI will generate chapters, summaries, and quizzes for you.
             </p>
             <Link
               href="/create"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-lg transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-500 hover:bg-emerald-400 text-foreground font-semibold rounded-lg transition-all"
             >
               <PlusCircle className="w-4 h-4" />
               Create Your First Course

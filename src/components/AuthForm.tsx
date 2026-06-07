@@ -122,17 +122,17 @@ const AuthForm = () => {
       {/* Logo */}
       <div className="flex flex-col items-center mb-8">
         <div className="w-12 h-12 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-xl shadow-emerald-500/30 mb-4">
-          <BookOpen className="w-6 h-6 text-white" />
+          <BookOpen className="w-6 h-6 text-foreground" />
         </div>
-        <h1 className="text-2xl font-bold text-white">Smartify</h1>
-        <p className="text-sm text-slate-500 mt-1">AI-powered learning platform</p>
+        <h1 className="text-2xl font-bold text-foreground">Smartify</h1>
+        <p className="text-sm text-muted-foreground mt-1">AI-powered learning platform</p>
       </div>
 
       {/* Card */}
-      <div className="bg-[#041123] border border-slate-800 rounded-2xl p-8 shadow-2xl">
+      <div className="bg-card border border-border rounded-2xl p-8 shadow-2xl">
 
         {/* Tab toggle */}
-        <div className="flex bg-slate-900 rounded-xl p-1 mb-6">
+        <div className="flex bg-muted rounded-xl p-1 mb-6">
           {(["login", "register"] as Mode[]).map((m) => (
             <button
               key={m}
@@ -140,8 +140,8 @@ const AuthForm = () => {
               className={cn(
                 "flex-1 py-2 rounded-lg text-sm font-semibold capitalize transition-all duration-150",
                 mode === m
-                  ? "bg-emerald-500 text-white shadow-md shadow-emerald-500/20"
-                  : "text-slate-500 hover:text-slate-300"
+                  ? "bg-emerald-500 text-foreground shadow-md shadow-emerald-500/20"
+                  : "text-muted-foreground hover:text-slate-300"
               )}
             >
               {m === "login" ? "Sign In" : "Sign Up"}
@@ -168,7 +168,7 @@ const AuthForm = () => {
           {/* Name — register only */}
           {mode === "register" && (
             <div>
-              <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest block mb-1.5">
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-1.5">
                 Full Name
               </label>
               <div className="relative">
@@ -180,7 +180,7 @@ const AuthForm = () => {
                   placeholder="Your full name"
                   required
                   disabled={loading}
-                  className="w-full bg-[#020B18] border border-slate-700 text-white placeholder:text-slate-600 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors disabled:opacity-50"
+                  className="w-full bg-background border border-slate-700 text-foreground placeholder:text-slate-600 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors disabled:opacity-50"
                 />
               </div>
             </div>
@@ -188,7 +188,7 @@ const AuthForm = () => {
 
           {/* Email */}
           <div>
-            <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest block mb-1.5">
+            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-1.5">
               Email Address
             </label>
             <div className="relative">
@@ -200,14 +200,14 @@ const AuthForm = () => {
                 placeholder="you@example.com"
                 required
                 disabled={loading}
-                className="w-full bg-[#020B18] border border-slate-700 text-white placeholder:text-slate-600 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors disabled:opacity-50"
+                className="w-full bg-background border border-slate-700 text-foreground placeholder:text-slate-600 rounded-lg pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors disabled:opacity-50"
               />
             </div>
           </div>
 
           {/* Password */}
           <div>
-            <label className="text-xs font-semibold text-slate-400 uppercase tracking-widest block mb-1.5">
+            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-widest block mb-1.5">
               Password
             </label>
             <div className="relative">
@@ -219,12 +219,12 @@ const AuthForm = () => {
                 placeholder={mode === "register" ? "Min. 8 characters" : "Your password"}
                 required
                 disabled={loading}
-                className="w-full bg-[#020B18] border border-slate-700 text-white placeholder:text-slate-600 rounded-lg pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors disabled:opacity-50"
+                className="w-full bg-background border border-slate-700 text-foreground placeholder:text-slate-600 rounded-lg pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:border-emerald-500/60 transition-colors disabled:opacity-50"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-400 transition-colors"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 hover:text-muted-foreground transition-colors"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -233,7 +233,7 @@ const AuthForm = () => {
             {/* Password strength bar */}
             {mode === "register" && strength && (
               <div className="mt-2">
-                <div className="h-1 bg-slate-800 rounded-full overflow-hidden">
+                <div className="h-1 bg-muted rounded-full overflow-hidden">
                   <div className={cn("h-full rounded-full transition-all duration-300", strength.color, strength.width)} />
                 </div>
                 <p className={cn("text-xs mt-1", strength.color.replace("bg-", "text-"))}>
@@ -263,7 +263,7 @@ const AuthForm = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-400 text-white font-semibold rounded-lg transition-all duration-150 shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 mt-2"
+            className="w-full flex items-center justify-center gap-2 py-3 bg-emerald-500 hover:bg-emerald-400 text-foreground font-semibold rounded-lg transition-all duration-150 shadow-lg shadow-emerald-500/20 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-y-0 mt-2"
           >
             {loading
               ? <><Loader2 className="w-4 h-4 animate-spin" /> {mode === "login" ? "Signing in..." : "Creating account..."}</>
@@ -274,16 +274,16 @@ const AuthForm = () => {
 
         {/* Divider */}
         <div className="flex items-center gap-3 my-5">
-          <div className="flex-1 h-px bg-slate-800" />
+          <div className="flex-1 h-px bg-muted" />
           <span className="text-xs text-slate-600 font-medium">or continue with</span>
-          <div className="flex-1 h-px bg-slate-800" />
+          <div className="flex-1 h-px bg-muted" />
         </div>
 
         {/* Google */}
         <button
           onClick={handleGoogle}
           disabled={googleLoading}
-          className="w-full flex items-center justify-center gap-3 py-2.5 border border-slate-700 hover:border-slate-600 rounded-lg text-sm font-medium text-slate-300 hover:text-white hover:bg-slate-800/50 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full flex items-center justify-center gap-3 py-2.5 border border-slate-700 hover:border-slate-600 rounded-lg text-sm font-medium text-slate-300 hover:text-foreground hover:bg-muted/50 transition-all duration-150 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {googleLoading
             ? <Loader2 className="w-4 h-4 animate-spin" />

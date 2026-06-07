@@ -32,7 +32,7 @@ const CreateChapters = async ({ params: { courseId }, searchParams }: Props) => 
   if (!course) return redirect("/create");
 
   return (
-    <div className="min-h-screen bg-[#020B18] text-white py-20 px-6 font-sans">
+    <div className="min-h-screen bg-background text-foreground py-20 px-6 font-sans">
       <div className="flex flex-col items-start max-w-3xl mx-auto">
 
         <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-bold mb-4 uppercase tracking-wider shadow-sm">
@@ -60,7 +60,7 @@ const CreateChapters = async ({ params: { courseId }, searchParams }: Props) => 
           </div>
         </div>
 
-        <div className="w-full bg-[#041123] border border-slate-800 rounded-2xl p-6 lg:p-8 shadow-2xl">
+        <div className="w-full bg-card border border-border rounded-2xl p-6 lg:p-8 shadow-2xl">
           <ConfirmChapters course={course} initialStep={isEditMode ? "review" : "generate"} />
         </div>
 

@@ -89,7 +89,7 @@ const CreateCourseForm = ({ isPro }: Props) => {
                     placeholder="e.g. Introduction to Machine Learning"
                     {...field}
                     disabled={isPending}
-                    className="mt-1.5 bg-[#020B18] border-slate-700 text-white placeholder:text-slate-600 focus:border-emerald-500/60 focus:ring-emerald-500/20 rounded-lg h-11 text-sm transition-colors"
+                    className="mt-1.5 bg-background border-slate-700 text-foreground placeholder:text-slate-600 focus:border-emerald-500/60 focus:ring-emerald-500/20 rounded-lg h-11 text-sm transition-colors"
                   />
                 </FormControl>
               </FormItem>
@@ -122,8 +122,8 @@ const CreateCourseForm = ({ isPro }: Props) => {
                     name={`units.${index}`}
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel className="text-xs font-medium text-slate-500 flex items-center gap-1.5">
-                          <span className="w-4 h-4 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-500">
+                        <FormLabel className="text-xs font-medium text-muted-foreground flex items-center gap-1.5">
+                          <span className="w-4 h-4 rounded-full bg-muted border border-slate-700 flex items-center justify-center text-[10px] font-bold text-muted-foreground">
                             {index + 1}
                           </span>
                           Unit {index + 1}
@@ -139,7 +139,7 @@ const CreateCourseForm = ({ isPro }: Props) => {
                             }`}
                             {...field}
                             disabled={isPending}
-                            className="mt-1 bg-[#020B18] border-slate-700 text-white placeholder:text-slate-600 focus:border-emerald-500/60 focus:ring-emerald-500/20 rounded-lg h-10 text-sm transition-colors"
+                            className="mt-1 bg-background border-slate-700 text-foreground placeholder:text-slate-600 focus:border-emerald-500/60 focus:ring-emerald-500/20 rounded-lg h-10 text-sm transition-colors"
                           />
                         </FormControl>
                       </FormItem>
@@ -155,7 +155,7 @@ const CreateCourseForm = ({ isPro }: Props) => {
                 type="button"
                 onClick={() => form.setValue("units", [...units, ""])}
                 disabled={isPending}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 text-slate-400 hover:text-white hover:border-emerald-500/50 hover:bg-slate-800 text-xs font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 text-muted-foreground hover:text-foreground hover:border-emerald-500/50 hover:bg-muted text-xs font-medium transition-all duration-150 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Unit
@@ -164,7 +164,7 @@ const CreateCourseForm = ({ isPro }: Props) => {
                 type="button"
                 onClick={() => form.setValue("units", units.slice(0, -1))}
                 disabled={isPending || units.length <= 1}
-                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 text-slate-400 hover:text-red-400 hover:border-red-500/40 hover:bg-red-500/5 text-xs font-medium transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
+                className="flex items-center gap-1.5 px-3 py-2 rounded-lg border border-slate-700 text-muted-foreground hover:text-red-400 hover:border-red-500/40 hover:bg-red-500/5 text-xs font-medium transition-all duration-150 disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 <Trash className="w-3.5 h-3.5" />
                 Remove Last
@@ -173,7 +173,7 @@ const CreateCourseForm = ({ isPro }: Props) => {
           </div>
 
           {/* Divider */}
-          <div className="border-t border-slate-800" />
+          <div className="border-t border-border" />
 
           {/* Submit */}
           <button
@@ -182,8 +182,8 @@ const CreateCourseForm = ({ isPro }: Props) => {
             className={cn(
               "w-full flex items-center justify-center gap-2.5 py-3.5 rounded-xl font-semibold text-sm transition-all duration-150",
               isPending
-                ? "bg-emerald-600/50 text-white/60 cursor-not-allowed"
-                : "bg-emerald-500 hover:bg-emerald-400 text-white shadow-lg shadow-emerald-500/25 hover:-translate-y-0.5"
+                ? "bg-emerald-600/50 text-foreground/60 cursor-not-allowed"
+                : "bg-emerald-500 hover:bg-emerald-400 text-foreground shadow-lg shadow-emerald-500/25 hover:-translate-y-0.5"
             )}
           >
             {isPending ? (
@@ -202,7 +202,7 @@ const CreateCourseForm = ({ isPro }: Props) => {
       </Form>
 
       {!isPro && (
-        <div className="mt-6 pt-6 border-t border-slate-800">
+        <div className="mt-6 pt-6 border-t border-border">
         </div>
       )}
     </div>

@@ -28,19 +28,19 @@ const CourseSideBar = ({
     totalChapters > 0 ? Math.round((completedCount / totalChapters) * 100) : 0;
 
   return (
-    <div className="fixed top-0 bottom-0 left-0 w-[280px] lg:w-[320px] bg-[#041123] border-r border-slate-800 overflow-y-auto flex flex-col">
+    <div className="fixed top-0 bottom-0 left-0 w-[280px] lg:w-[320px] bg-card border-r border-border overflow-y-auto flex flex-col">
 
       {/* Course title header */}
-      <div className="sticky top-0 z-20 bg-[#041123] border-b border-slate-800 px-5 py-5 pt-20">
+      <div className="sticky top-0 z-20 bg-card border-b border-border px-5 py-5 pt-20">
         <div className="flex items-center gap-2.5 mb-4">
           <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center shrink-0">
             <BookOpen className="w-4 h-4 text-emerald-400" />
           </div>
           <div className="min-w-0">
-            <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest mb-0.5">
+            <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest mb-0.5">
               Course
             </p>
-            <h1 className="text-sm font-semibold text-white leading-snug line-clamp-2">
+            <h1 className="text-sm font-semibold text-foreground leading-snug line-clamp-2">
               {course.name}
             </h1>
           </div>
@@ -49,14 +49,14 @@ const CourseSideBar = ({
         {/* Progress bar */}
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] text-slate-500 font-medium uppercase tracking-wider">
+            <span className="text-[10px] text-muted-foreground font-medium uppercase tracking-wider">
               Progress
             </span>
             <span className="text-[10px] font-bold text-emerald-400">
               {completedCount}/{totalChapters}
             </span>
           </div>
-          <div className="h-1.5 w-full bg-slate-800 rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
             <div
               className="h-full bg-emerald-500 rounded-full transition-all duration-500"
               style={{ width: `${progressPercent}%` }}
@@ -79,17 +79,17 @@ const CourseSideBar = ({
             {/* Unit header */}
             <div className="px-3 mb-2">
               <div className="flex items-center gap-2">
-                <span className="w-5 h-5 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[10px] font-bold text-slate-400 shrink-0">
+                <span className="w-5 h-5 rounded-full bg-muted border border-slate-700 flex items-center justify-center text-[10px] font-bold text-muted-foreground shrink-0">
                   {unitIndex + 1}
                 </span>
-                <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest truncate">
+                <p className="text-[10px] font-semibold text-muted-foreground uppercase tracking-widest truncate">
                   {unit.name}
                 </p>
               </div>
             </div>
 
             {/* Chapters */}
-            <div className="ml-3 border-l border-slate-800 pl-3 space-y-0.5">
+            <div className="ml-3 border-l border-border pl-3 space-y-0.5">
               {unit.chapters.map((chapter, chapterIndex) => {
                 const isActive = chapter.id === currentChapterId;
                 const isCompleted = completedSet.has(chapter.id);
@@ -102,7 +102,7 @@ const CourseSideBar = ({
                       "flex items-start gap-2.5 px-3 py-2.5 rounded-lg transition-all duration-150 group",
                       isActive
                         ? "bg-emerald-500/15 border border-emerald-500/30"
-                        : "hover:bg-slate-800/60 border border-transparent"
+                        : "hover:bg-muted/60 border border-transparent"
                     )}
                   >
                     {isCompleted ? (
@@ -126,8 +126,8 @@ const CourseSideBar = ({
                         isActive
                           ? "text-emerald-300 font-medium"
                           : isCompleted
-                          ? "text-slate-400 group-hover:text-slate-200"
-                          : "text-slate-500 group-hover:text-slate-300"
+                          ? "text-muted-foreground group-hover:text-slate-200"
+                          : "text-muted-foreground group-hover:text-slate-300"
                       )}
                     >
                       {chapter.name}

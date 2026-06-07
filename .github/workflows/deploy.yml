@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Smartify
 
 on:
   push:
@@ -6,28 +6,24 @@ on:
       - main
 
 jobs:
-  Production:
+  deploy:
     name: Deploy to DigitalOcean
     runs-on: ubuntu-latest
-    environment: Production
-    steps:
-      - uses: actions/checkout@v3
-      - name: Build & Deploy
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_HOST: ${{secrets.SSH_HOST}}
-          USER_NAME: ${{secrets.USER_NAME}}
 
-        run: |
-          echo "Deploying to EC2"
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > private_key && chmod 600 private_key
-          ssh -o StrictHostKeyChecking=no -i private_key ${{ secrets.USER_NAME }}@${{ secrets.SSH_HOST }} '
-          cd /root/smartify &&
-          git reset --hard &&
-          git checkout main &&
-          git pull origin main &&
-          docker-compose down &&
-          docker-compose rm -fsv &&
-          docker-compose build --no-cache &&
-          docker-compose up -d
-          '
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy to Droplet
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.USER_NAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/deploy/smartify
+            git reset --hard
+            git pull origin main
+            docker compose down
+            docker compose build --no-cache
+            docker compose up -d
+            docker image prune -f
