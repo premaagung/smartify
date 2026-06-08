@@ -4,7 +4,7 @@
 > "Integrasi Large Language Model (LLM) untuk Prototipe Sistem Pembuatan Konten Pembelajaran di Sekolah Pariwisata Mediterranean Bali"
 >
 > **Author:** A. A. Bagus Premananta Kumara (210030487)
-> **Live:** http://167.71.218.16:3000
+> **Live:** https://smartifyapp.me
 
 ---
 
