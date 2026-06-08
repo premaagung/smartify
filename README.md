@@ -1,15 +1,16 @@
-# Smartify AI — LMS Learning Content Creation System
+# Smartify — AI-Powered LMS Content Creation System
 
 > **Tugas Akhir — ITB STIKOM Bali**
 > "Integrasi Large Language Model (LLM) untuk Prototipe Sistem Pembuatan Konten Pembelajaran di Sekolah Pariwisata Mediterranean Bali"
 >
 > **Author:** A. A. Bagus Premananta Kumara (210030487)
+> **Live:** http://167.71.218.16:3000
 
 ---
 
 ## Overview
 
-Smartify is an AI-powered Learning Management System (LMS) prototype that integrates Large Language Models (LLM) to automate the creation of learning content for Sekolah Pariwisata Mediterranean Bali. The system allows instructors to generate structured courses complete with curated YouTube videos, AI-generated summaries, and concept check quizzes — reducing manual content creation time from 3-4 hours per module to minutes.
+Smartify is an AI-powered Learning Management System (LMS) prototype that integrates Google Gemini to automate the creation of structured learning content for Sekolah Pariwisata Mediterranean Bali. Instructors can generate complete courses — including curated YouTube videos, AI-generated summaries, and concept-check quizzes — reducing manual content creation time by up to **80.74%** compared to traditional methods.
 
 ---
 
@@ -20,33 +21,34 @@ Smartify is an AI-powered Learning Management System (LMS) prototype that integr
 | Framework | Next.js 14.2.35 (App Router) + TypeScript |
 | Database | MySQL (Aiven Cloud) + Prisma ORM 5.17.0 |
 | Authentication | NextAuth v4 (Google OAuth + Email/Password) |
-| AI / LLM | Gemini API (gemini-2.0-flash-lite) / OpenRouter |
+| AI / LLM | Google Gemini API (`gemini-2.5-flash`) |
 | Video | YouTube Data API v3 |
 | Images | Unsplash API |
-| Styling | Tailwind CSS |
+| Styling | Tailwind CSS + next-themes |
 | State Management | TanStack Query + Axios |
 | Password Hashing | bcryptjs |
-| Containerization | Docker + docker-compose |
-| CI/CD | GitHub Actions |
-| Hosting | DigitalOcean Droplet |
+| Containerization | Docker 29.5.3 + docker-compose |
+| CI/CD | GitHub Actions (3-job pipeline) |
+| Hosting | DigitalOcean Droplet SGP1 ($16/month) |
 
 ---
 
 ## Features
 
 ### For Instructors
-- **AI Course Creation** — Enter a topic and units, AI generates chapter structure, videos, summaries, and quizzes automatically
-- **Manual Course Builder** — 4-step wizard to manually create chapters (Video → Summary → Quiz → Confirm)
-- **Curriculum Alignment Review** — Generate content first, then review each chapter's alignment with school curriculum. Expand chapters to preview video, summary, and quiz. Rebuild non-aligned chapters manually
-- **Edit Course** — Review and rebuild any existing course content via the alignment review flow
-- **Delete Course** — Remove courses with confirmation dialog
+- **AI Course Creation** — Enter a topic and number of units; Gemini generates chapter structure, YouTube videos, summaries, and quizzes automatically
+- **Manual Course Builder** — 4-step wizard: Video → Summary → Quiz → Confirm
+- **Curriculum Alignment Review** — Review each AI-generated chapter against school curriculum. Expand to preview video + summary + quiz inline. Rebuild non-aligned chapters manually via the Manual Course Builder
+- **Edit Course** — Pencil icon on gallery card → opens alignment review flow for any existing course
+- **Delete Course** — Trash icon with confirmation dialog
 
 ### For Students
-- **Course Viewer** — Watch curated YouTube videos and read AI-generated summaries per chapter
-- **Concept Check Quiz** — Answer 5 multiple choice questions per chapter
+- **Course Viewer** — Watch curated YouTube videos with AI-generated summaries per chapter
+- **Concept Check Quiz** — 5 multiple choice questions per chapter (4 options)
 - **Progress Tracking** — Quiz completion marks chapters as done, tracked per user
-- **Dashboard** — Personal learning progress overview with per-course completion stats
-- **Continue Learning** — Homepage card showing last accessed course with direct link to next chapter
+- **Dashboard** — Personal learning stats: chapters completed, quiz scores, per-course progress
+- **Continue Learning** — Homepage card linking directly to the next incomplete chapter
+- **Settings** — Account info, learning progress overview, quiz performance stats
 
 ---
 
@@ -54,7 +56,7 @@ Smartify is an AI-powered Learning Management System (LMS) prototype that integr
 
 - Node.js 18+
 - npm
-- MySQL database (or Aiven cloud MySQL)
+- MySQL database (local or Aiven Cloud)
 - Docker (for containerized deployment)
 
 ---
@@ -77,15 +79,16 @@ GOOGLE_CLIENT_SECRET="your-google-client-secret"
 
 # AI / LLM
 GEMINI_API_KEY="your-gemini-api-key"
-# OR for development with OpenRouter:
-OPENROUTER_API_KEY="your-openrouter-api-key"
-OPENROUTER_MODEL="openrouter/hunter-alpha"
+GEMINI_MODEL="gemini-2.5-flash"
 
 # YouTube Data API v3
 YOUTUBE_API_KEY="your-youtube-api-key"
 
 # Unsplash API
 UNSPLASH_ACCESS_KEY="your-unsplash-access-key"
+
+# App URL
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
 ---
@@ -117,10 +120,6 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ### Using Docker (Local)
 
 ```bash
-# Copy env file
-cp .env.example .env
-# Fill in your environment variables
-
 # Build and run with Docker Compose
 docker compose up --build
 ```
@@ -140,6 +139,7 @@ Course ── Unit ── Chapter ──── Question
 ```
 
 Key model — `UserChapterProgress` tracks per-user quiz completion:
+
 ```prisma
 model UserChapterProgress {
   userId    String
@@ -162,55 +162,58 @@ smartify/
 ├── src/
 │   ├── app/
 │   │   ├── page.tsx                    # Homepage (server component)
-│   │   ├── auth/                       # Authentication page
+│   │   ├── auth/page.tsx               # Authentication page
 │   │   ├── create/
-│   │   │   ├── page.tsx                # Course creation form
-│   │   │   └── [courseId]/page.tsx     # Curriculum alignment review
+│   │   │   ├── page.tsx                # AI course creation form
+│   │   │   └── [courseId]/page.tsx     # Curriculum alignment review + edit
 │   │   ├── course/[...slug]/           # Course viewer
-│   │   ├── gallery/                    # Course gallery
-│   │   ├── dashboard/                  # User progress dashboard
-│   │   ├── settings/                   # User settings
+│   │   ├── gallery/page.tsx            # Course gallery with progress
+│   │   ├── dashboard/page.tsx          # Personal learning dashboard
+│   │   ├── settings/page.tsx           # Account + learning stats
 │   │   └── api/
+│   │       ├── auth/register/          # Email/password registration
 │   │       ├── course/
 │   │       │   ├── createChapters/     # AI course structure generation
-│   │       │   └── [courseId]/         # Course CRUD
+│   │       │   └── [courseId]/         # Course delete
 │   │       ├── chapter/
-│   │       │   ├── getInfo/            # AI chapter content generation
+│   │       │   ├── getInfo/            # AI chapter content (summary + quiz)
 │   │       │   ├── completeChapter/    # Save quiz progress
 │   │       │   ├── quizResult/         # Get previous quiz result
-│   │       │   ├── generateQuiz/       # AI quiz generation
-│   │       │   ├── summarizeVideo/     # AI summary generation
+│   │       │   ├── generateQuiz/       # Manual quiz generation
+│   │       │   ├── summarizeVideo/     # Manual summary generation
 │   │       │   └── saveManual/         # Save manual chapter
 │   │       └── youtube/search/         # YouTube video search
 │   ├── components/
-│   │   ├── ConfirmChapters.tsx         # Curriculum alignment review
-│   │   ├── ChapterCard.tsx             # Chapter generation card
-│   │   ├── ManualChapterModal.tsx      # Manual chapter builder
-│   │   ├── QuizCards.tsx               # Quiz component
-│   │   ├── CourseSideBar.tsx           # Course navigation sidebar
-│   │   ├── GalleryCourseCard.tsx       # Gallery course card
-│   │   ├── HomeClient.tsx              # Homepage client component
-│   │   └── Navbar.tsx                  # Navigation bar
+│   │   ├── ConfirmChapters.tsx         # Curriculum alignment review UI
+│   │   ├── ChapterCard.tsx             # Chapter generation card (AI + Manual)
+│   │   ├── ManualChapterModal.tsx      # 4-step manual chapter wizard
+│   │   ├── QuizCards.tsx               # Quiz UI with previous attempt banner
+│   │   ├── CourseSideBar.tsx           # Course navigation + progress
+│   │   ├── GalleryCourseCard.tsx       # Gallery card with edit/delete
+│   │   ├── HomeClient.tsx              # Continue learning (client)
+│   │   ├── AuthForm.tsx                # Login/register form
+│   │   ├── Navbar.tsx                  # Navigation + theme toggle
+│   │   ├── ThemeToggle.tsx             # Light/dark mode toggle
+│   │   └── ui/                         # shadcn/ui components
 │   └── lib/
-│       ├── gemini.ts                   # LLM integration (strict_output)
-│       ├── youtube.ts                  # YouTube API
-│       ├── unsplash.ts                 # Unsplash API
+│       ├── gemini.ts                   # Gemini SDK (strict_output, cleanJSON)
+│       ├── youtube.ts                  # YouTube API search
+│       ├── unsplash.ts                 # Unsplash image fetch with fallback
 │       ├── auth.ts                     # NextAuth config
-│       └── db.ts                       # Prisma client
-├── prisma/
-│   └── schema.prisma                   # Database schema
-├── Dockerfile
+│       ├── db.ts                       # Prisma client singleton
+│       └── utils.ts                    # Utility functions
+├── prisma/schema.prisma                # Database schema
+├── __tests__/smartify.test.ts          # Jest unit tests
+├── Dockerfile                          # Multi-stage build (output: standalone)
 ├── docker-compose.yml
-└── .github/
-    └── workflows/
-        └── ci-cd.yml                   # GitHub Actions pipeline
+└── .github/workflows/ci-cd.yml         # 3-job CI/CD pipeline
 ```
 
 ---
 
 ## CI/CD Pipeline
 
-The GitHub Actions pipeline runs on every push to `main`:
+Runs automatically on every push to `main`:
 
 ```
 Push to main
@@ -226,16 +229,18 @@ Job 3: Deploy via SSH → DigitalOcean Droplet
 
 | Secret | Description |
 |---|---|
-| `DROPLET_IP` | DigitalOcean Droplet IP address |
-| `DROPLET_USER` | SSH username (root) |
-| `DROPLET_SSH_KEY` | Private SSH key for Droplet access |
+| `DROPLET_IP` | DigitalOcean Droplet IP |
+| `DROPLET_USER` | SSH username (`root`) |
+| `DROPLET_SSH_KEY` | Private SSH key |
 | `DATABASE_URL` | Aiven MySQL connection string |
-| `NEXTAUTH_SECRET` | NextAuth secret key |
-| `NEXTAUTH_URL` | Production app URL |
+| `NEXTAUTH_SECRET` | NextAuth secret |
+| `NEXTAUTH_URL` | Production URL |
 | `GOOGLE_CLIENT_ID` | Google OAuth client ID |
 | `GOOGLE_CLIENT_SECRET` | Google OAuth client secret |
 | `GEMINI_API_KEY` | Gemini API key |
+| `GEMINI_MODEL` | Gemini model name |
 | `YOUTUBE_API_KEY` | YouTube Data API v3 key |
+| `UNSPLASH_ACCESS_KEY` | Unsplash API key |
 
 ---
 
@@ -243,10 +248,11 @@ Job 3: Deploy via SSH → DigitalOcean Droplet
 
 ### 1. Create Droplet
 - OS: Ubuntu 24.04 LTS
-- Region: Singapore
-- Size: $6/month (1GB RAM)
+- Region: Singapore (SGP1)
+- Size: Premium Intel $16/month
 
 ### 2. Setup Docker on Droplet
+
 ```bash
 ssh root@YOUR_DROPLET_IP
 
@@ -259,13 +265,12 @@ apt-get update && apt-get install -y docker-ce docker-ce-cli containerd.io
 ufw allow 3000 && ufw allow OpenSSH && ufw --force enable
 ```
 
-### 3. Add GitHub Secrets and Push
+### 3. Push to Deploy
+
 ```bash
 git push origin main
-# GitHub Actions will automatically build and deploy
+# GitHub Actions builds and deploys automatically
 ```
-
-App will be live at `http://YOUR_DROPLET_IP:3000`
 
 ---
 
@@ -275,32 +280,32 @@ App will be live at `http://YOUR_DROPLET_IP:3000`
 # Run all tests
 npm test
 
-# Run tests with coverage
+# Run with coverage report
 npm test -- --coverage
 ```
 
 Test cases cover:
-- `strict_output` function (JSON parsing, code fence stripping, null sanitization)
-- API routes (createChapters, completeChapter, quizResult)
-- Utility functions (score calculation, YouTube search)
+- `strict_output` — JSON parsing, code fence stripping, null sanitization
+- API routes — `createChapters`, `completeChapter`, `quizResult`
+- Utility functions — score calculation, YouTube search
 
 ---
 
 ## API Rate Limits
 
-| Service | Limit | Handling |
+| Service | Free Tier Limit | Handling |
 |---|---|---|
-| Gemini API (free) | 15 req/min | Sequential 5s delay between chapters |
-| YouTube Data API | 10,000 units/day | Search only (100 units/search) |
-| Unsplash API | 50 req/hour | Fallback image on failure |
+| Gemini API | 15 req/min | Sequential generation per chapter |
+| YouTube Data API | 10,000 units/day | 100 units per search |
+| Unsplash API | 50 req/hour | Throws error on failure, no broken images saved |
 
 ---
 
 ## Known Limitations
 
-- YouTube search may return no results for very niche topics — use Edit Course → Rebuild to fix manually
-- Gemini free tier rate limits cause slow generation — upgrade to paid plan for production
-- No role-based access control (instructor vs student) — documented as future development
+- YouTube search may return no results for very niche topics — use Edit Course to rebuild manually
+- Gemini free tier rate limits cause slower generation — upgrade to paid tier for production scale
+- No role-based access control (instructor vs student) — documented as future development in BAB V
 
 ---
 
@@ -309,22 +314,21 @@ Test cases cover:
 - Role-based access control (Instructor / Student / Admin)
 - Admin user management panel
 - Course publish/draft system
-- Course progress certificates
+- Completion certificates
 - Mobile application
-- Multi-language support
+- Multi-language support (Bahasa Indonesia)
 
 ---
 
 ## License
 
-This project is developed as an undergraduate thesis prototype at Institut Teknologi dan Bisnis (ITB) STIKOM Bali. All rights reserved.
+Developed as an undergraduate thesis prototype at Institut Teknologi dan Bisnis (ITB) STIKOM Bali. All rights reserved.
 
 ---
 
 ## Acknowledgements
 
-- Sekolah Pariwisata Mediterranean Bali — research location and stakeholder
-- Google Gemini API — LLM provider
-- ITB STIKOM Bali — academic institution
-- Dosen Pembimbing: I Nyoman Rudy Hendrawan, S.Kom., M.Kom. and Ir. Putu Adi Guna Permana, S.Kom., M.Kom.# test CI/CD
-# test
+- **Sekolah Pariwisata Mediterranean Bali** — research location and evaluation stakeholder
+- **Google Gemini API** — LLM provider
+- **ITB STIKOM Bali** — academic institution
+- **Dosen Pembimbing:** I Nyoman Rudy Hendrawan, S.Kom., M.Kom. dan Ir. Putu Adi Guna Permana, S.Kom., M.Kom.
